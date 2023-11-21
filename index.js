@@ -12,7 +12,7 @@ class ProductManager {
             }
         }
         if (this.products.some(product => product.code === code)) {
-            console.error("El código del producto ya existe. Por favor, elija otro código.");
+            console.error("El código del equipo ya existe.");
             return;
         }
         const product = {
@@ -33,7 +33,7 @@ class ProductManager {
     getProductById(id) {
         const product = this.products.find(product => product.id === id);
         if (!product) {
-            console.error("Producto no encontrado. ID: ", id);
+            console.error("Equipo no encontrado ", id);
         }
         return product || null;
     }
@@ -41,7 +41,7 @@ class ProductManager {
 const productManager  = new ProductManager();
 productManager.addProduct("Laptop", "Pantalla 15.6 RAM 8GB SSD 1TB", 1755.22, "ruta/laptop.jpg", "E001", 6);
 productManager.addProduct("PC Desktop", "i5 RAM 8GB SSD 500GB", 1300, "ruta/pc.jpg", "E002", 3);
-const productById = productManager.getProductById(2);
+const productById = productManager.getProductById(1);
 console.log(productById);
 
 const notExistentProduct = productManager.getProductById(12);
