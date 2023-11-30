@@ -1,5 +1,4 @@
 const fs = require('fs/promises');
-
 class ProductManager {
     constructor(filePath) {
         this.path = filePath;
