@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "title": "Laptop",
+    "description": "Pantalla 15.6 RAM 8GB SSD 1TB",
+    "price": 1755.22,
+    "thumbnail": "ruta/laptop.jpg",
+    "code": "E001",
+    "stock": 6
+  },
+  {
+    "id": 2,
+    "title": "PC Desktop",
+    "description": "i5 RAM 8GB SSD 500GB",
+    "price": 1300,
+    "thumbnail": "ruta/pc.jpg",
+    "code": "E002",
+    "stock": 3
+  }
+]
