@@ -113,7 +113,7 @@ class ProductManager {
 const productManager = new ProductManager('./equipos.json');
 productManager.addProduct("Laptop", "Pantalla 15.6 RAM 8GB SSD 1TB", 1755.22, "ruta/laptop.jpg", "E001", 6);
 productManager.addProduct("PC Desktop", "i5 RAM 8GB SSD 500GB", 1300, "ruta/pc.jpg", "E002", 3);
-/*
+
 //Actualizar equipos 
 const productManager = new ProductManager('./equipos.json');
 (async () => {
@@ -129,4 +129,4 @@ const productManagerDelte = new ProductManager('./equipos.json');
     await productManagerDelte.deleteProduct(1); 
     const deletedProduct = productManagerDelte.getProductById(1);
     console.log(deletedProduct); 
-})();*/
+})();
