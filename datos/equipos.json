@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Laptop HP EliteBook",
+    "description": "Potente laptop para uso empresarial",
+    "code": "LT001",
+    "price": 1099.99,
+    "status": true,
+    "stock": 50,
+    "category": "Laptops",
+    "thumbnails": ["laptop_image1.jpg", "laptop_image2.jpg"]
+  },
+  {
+    "id": 2,
+    "title": "PC de Escritorio Dell OptiPlex",
+    "description": "Computadora de escritorio para uso en oficinas",
+    "code": "PC001",
+    "price": 899.99,
+    "status": true,
+    "stock": 30,
+    "category": "Computadoras de Escritorio",
+    "thumbnails": ["desktop_image1.jpg", "desktop_image2.jpg"]
+  },
+  {
+    "id": 3,
+    "title": "Monitor ASUS 27 pulgadas",
+    "description": "Monitor de alta resolución para una experiencia visual impresionante",
+    "code": "MN001",
+    "price": 349.99,
+    "status": true,
+    "stock": 20,
+    "category": "Monitores",
+    "thumbnails": ["monitor_image1.jpg", "monitor_image2.jpg"]
+  }
+]

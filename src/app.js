@@ -22,7 +22,7 @@ app.get('/equipos', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
+document.getElementById('datatable-pendientes')
 app.get('/equipos/:id', async (req, res) => {
   try {
     const productId = parseInt(req.params.id);
