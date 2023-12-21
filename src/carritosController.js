@@ -1,21 +1,30 @@
 const fs = require('fs');
+const path = require('path');
+
 
 let carritos = [];
 
 const cargarDatos = () => {
+  const archivo = 'carritos.json';
+  const filePath = path.join(__dirname, '..', 'datos', archivo);
+
   try {
-    const carritosData = fs.readFileSync('./datos/carritos.json', 'utf8');
-    carritos = JSON.parse(carritosData) || [];
+    const datos = fs.readFileSync(filePath, 'utf8');
+    return JSON.parse(datos) || [];
   } catch (error) {
-    console.error('Error al cargar los datos de carrito:', error.message);
+    console.error(`Error al cargar los datos de ${archivo}:`, error.message);
+    return [];
   }
 };
 
 const guardarDatos = () => {
+  const archivo = 'carritos.json';
+  const filePath = path.join(__dirname, '..', 'datos', archivo);
+
   try {
-    fs.writeFileSync('./datos/carritos.json', JSON.stringify(carritos, null, 2), 'utf8');
+    fs.writeFileSync(filePath, JSON.stringify(carritos, null, 2), 'utf8');
   } catch (error) {
-    console.error('Error al guardar los datos de carrito:', error.message);
+    console.error(`Error al guardar los datos de ${archivo}:`, error.message);
   }
 };
 
