@@ -1,0 +1,75 @@
+<h5>Equipo Real-Time</h5>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {{#if equipos.length}}
+        {{#each equipos}}
+              <div class="col">
+                <div class="card">
+                  <img src="{{thumbnail}}" alt="Imagene de equipo" style="width: 10%; height: auto;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{title}} - ({{category}})</h5>
+                    <p class="card-text">
+                      Descripción: {{description}}<br>
+                      Precio: ${{price}}<br>
+                      Stock: {{stock}} unidades<br>
+                    </p>
+                  </div>
+                </div>
+              </div>
+        {{/each}}
+  {{else}}
+  <p>No hay equipos disponibles.</p>
+  {{/if}}     
+</div>
+<!-- Formulario para agregar productos-->
+<div class="mt-4">
+  <h5>Agregar Nuevo Producto</h5>
+  <form id="addProductForm" class="row">
+    <div class="mb-3 col-md-6">
+      <label for="title" class="form-label">Título:</label>
+      <input type="text" class="form-control" name="title" required>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="description" class="form-label">Descripción:</label>
+      <textarea class="form-control" name="description" required></textarea>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="code" class="form-label">Código:</label>
+      <input type="text" class="form-control" name="code" required>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="price" class="form-label">Precio:</label>
+     <input type="number" class="form-control" name="price" required>
+    </div>
+
+    <div class="mb-3 col-md-6">
+    <label for="status" class="form-label">Estado:</label>
+    <select class="form-select" aria-label="Select status" name="status">
+      <option value="true">Disponible</option>
+      <option value="false">Agotado</option> 
+    </select>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="stock" class="form-label">Stock:</label>
+      <input type="number" class="form-control" name="stock" required>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="category" class="form-label">Categoría:</label>
+      <input type="text" class="form-control" name="category" required>
+    </div>
+
+    <div class="mb-3 col-md-6">
+      <label for="thumbnails" class="form-label">URL Imagen:</label>
+      <input type="text" class="form-control" name="thumbnails" required>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="submitAddProductFormViaSocket()">Agregar Producto</button>
+
+  </form>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>

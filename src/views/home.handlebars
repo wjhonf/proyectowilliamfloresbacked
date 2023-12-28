@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-</head>
-<body>
-    <h1>Listado de Productos</h1>
-    <ul>
-        {{#each productos}}
-            <li>
-                <strong>{{this.title}}</strong>
-                <p>{{this.description}}</p>
-                <p>Precio: ${{this.price}}</p>
-            </li>
+<h5>Catálogo de Equipos</h5>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+  {{#if equipos.length}}
+        {{#each equipos}}
+              <div class="col">
+                <div class="card">
+                  <img src="{{thumbnail}}" alt="Imagene de equipo" style="width: 10%; height: auto;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{title}} - ({{category}})</h5>
+                    <p class="card-text">
+                      Descripción: {{description}}<br>
+                      Precio: ${{price}}<br>
+                      Stock: {{stock}} unidades<br>
+                    </p>
+                  </div>
+                </div>
+              </div>
         {{/each}}
-    </ul>
-</body>
-</html>
+  {{else}}
+  <p>No hay equipos disponibles.</p>
+  {{/if}}     
+</div>
+
