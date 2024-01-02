@@ -31,5 +31,60 @@
     "stock": 20,
     "category": "Monitores",
     "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "342",
+    "description": "334",
+    "code": "34",
+    "price": "23",
+    "status": "true",
+    "stock": "23",
+    "category": "23",
+    "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "342",
+    "description": "334",
+    "code": "34",
+    "price": "23",
+    "status": "true",
+    "stock": "23",
+    "category": "23",
+    "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "23",
+    "description": "we",
+    "code": "we",
+    "price": "",
+    "status": "true",
+    "stock": "",
+    "category": "we",
+    "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "45",
+    "description": "345",
+    "code": "345",
+    "price": "34",
+    "status": "true",
+    "stock": "34",
+    "category": "34",
+    "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "564",
+    "description": "645",
+    "code": "56",
+    "price": "56",
+    "status": "true",
+    "stock": "5",
+    "category": "5",
+    "thumbnail": "img/equipo3.jpg"
   }
 ]
