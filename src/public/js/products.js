@@ -1,8 +1,5 @@
 const socket = io();
-
 function submitAddProductFormViaSocket() {
-  console.log('Submit form called'); // Verifica si esta función se llama correctamente
-
   const title = document.querySelector('[name="title"]').value;
   const description = document.querySelector('[name="description"]').value;
   const code = document.querySelector('[name="code"]').value;
@@ -10,8 +7,7 @@ function submitAddProductFormViaSocket() {
   const status = document.querySelector('[name="status"]').value;
   const stock = document.querySelector('[name="stock"]').value;
   const category = document.querySelector('[name="category"]').value;
-  const thumbnails = document.querySelector('[name="thumbnails"]').value;
-
+  const thumbnail = document.querySelector('[name="thumbnail"]').value;
   const productData = {
     title,
     description,
@@ -20,7 +16,34 @@ function submitAddProductFormViaSocket() {
     status,
     stock,
     category,
-    thumbnails,
+    thumbnail,
   };
   socket.emit('addProduct', productData);
 }
+socket.on('productAdded', response  => {
+  console.log('Nuevo producto agregado');
+  renderProduct(response.product);
+});
+function renderProduct(product) {
+  const productList = document.querySelector('#productList');
+  const productElement = document.createElement('div');
+  productElement.classList.add('col');
+  productElement.innerHTML = `
+    <div class="card">
+    <img src="${product.thumbnail}" alt="${product.title}" style="width: 10%; height: auto;">
+    <div class="card-body">
+    <h5 class="card-title">${product.title} - (${product.category})</h5>
+    <p class="card-text">
+    Código: ${product.code}<br>
+    Descripción: ${product.description}<br>
+    Precio: $${product.price}<br>
+    Estado: ${product.status ? 'Disponible' : 'Agotado'}<br>
+    Stock: ${product.stock} unidades<br>
+    </p>
+    </div>
+    </div>
+  `;
+  productList.appendChild(productElement);
+}
+
+

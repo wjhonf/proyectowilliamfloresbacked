@@ -1,6 +1,11 @@
-<h5>Catálogo de Equipos</h5>
-<div class="row row-cols-1 row-cols-md-3 g-4">
-  {{#if equipos.length}}
+<br>
+<div class="card">
+  <div class="card-header">
+    Lista de equipos
+  </div>
+  <div class="card-body">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+    {{#if equipos.length}}
         {{#each equipos}}
               <div class="col">
                 <div class="card">
@@ -8,8 +13,10 @@
                   <div class="card-body">
                     <h5 class="card-title">{{title}} - ({{category}})</h5>
                     <p class="card-text">
+                      Código: {{code}}<br>
                       Descripción: {{description}}<br>
                       Precio: ${{price}}<br>
+                      Estado: {{#if status}}Disponible{{else}}Agotado{{/if}}<br>
                       Stock: {{stock}} unidades<br>
                     </p>
                   </div>
@@ -18,6 +25,9 @@
         {{/each}}
   {{else}}
   <p>No hay equipos disponibles.</p>
-  {{/if}}     
+  {{/if}}   
+</div>
+  </div>
+</div>    
 </div>
 

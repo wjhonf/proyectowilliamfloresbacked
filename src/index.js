@@ -1,11 +1,12 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const handlebars = require('express-handlebars');
 const { port } = require('./configs/server.config');
 const router = require('./router');
 const { Server } = require('socket.io');
-const agregarProducto = require('./controllers/product.controller').agregarProducto;
+const axios = require('axios');
 const app = express();
+
+app.use(express.json());
 
 // Configuración de Handlebars
 app.engine('handlebars', handlebars.engine());
@@ -22,16 +23,19 @@ const httpServer = app.listen(port, () => {
 const io = new Server(httpServer);
 io.on('connection', socket => {
   console.log(socket.id);
-  socket.on('message', data => {
-    console.log(data);
+  socket.on('addProduct', data => {
+    axios.post('http://localhost:8080/api/products', data)
+      .then(response => {
+        console.log('Producto agregado:', response.data);
+        io.emit('productAdded', response.data);
+      })
+      .catch(error => {
+        console.error('Error al agregar producto:', error.message);
+      });
   });
-  socket.emit('messageServer', 'Hola desde el servidor');
-  socket.broadcast.emit('messageOthers', 'Hola a todos menos al server');
-  io.emit('messageAll', 'Hola a todos los usuarios del sistema');
 });
 
 router(app, io);
-
 app.use((req, res) => {
   res.status(404).send('Página no encontrada');
 });
