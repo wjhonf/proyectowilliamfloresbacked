@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const Product = require('../models/product.model')
 const router = Router();
 const fs = require('fs');
 const path = require('path');
@@ -26,7 +27,6 @@ const obtenerEquipos = () => {
 const agregarProducto = (producto, io) => {
   const archivo = 'equipos.json';
   const filePath = path.join(rootDir, 'datos', archivo);
-
   try {
     const datos = fs.readFileSync(filePath, 'utf8');
     const productos = JSON.parse(datos) || [];

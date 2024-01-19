@@ -31,5 +31,27 @@
     "stock": 20,
     "category": "Monitores",
     "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "123",
+    "description": "123",
+    "code": "23",
+    "price": "2",
+    "status": "true",
+    "stock": "2",
+    "category": "2",
+    "thumbnail": "img/equipo3.jpg"
+  },
+  {
+    "id": 1,
+    "title": "wre",
+    "description": "we",
+    "code": "e",
+    "price": "",
+    "status": "true",
+    "stock": "",
+    "category": "e",
+    "thumbnail": "img/equipo3.jpg"
   }
 ]

@@ -1,9 +1,8 @@
 /node_modules/
 /src/app.js
 /src/productManager.js
-
 /equipos.json
-
+.env
 
 
 

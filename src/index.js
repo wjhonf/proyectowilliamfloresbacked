@@ -5,16 +5,19 @@ const router = require('./router');
 const { Server } = require('socket.io');
 const axios = require('axios');
 const app = express();
+const mongoConnect= require('./db');
 
 app.use(express.json());
-
+app.use(express.urlencoded({extended: true}))
+app.use(express.static(process.cwd() + '/src/public'));
 // Configuración de Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', process.cwd() + '/src/views');
 app.set('view engine', 'handlebars');
 
-app.use(express.static(process.cwd() + '/src/public'));
 
+
+mongoConnect()
 // Escuchando servidor
 const httpServer = app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
