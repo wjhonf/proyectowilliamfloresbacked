@@ -158,7 +158,7 @@ function saveProductChanges() {
          Swal.fire({
           toast: true,
           icon: 'info',
-          title: 'Equipo Actulizado',
+          title: 'Equipo Actualizado',
           animation: false,
           position: 'top-end',
           showConfirmButton: false,
@@ -171,7 +171,7 @@ function saveProductChanges() {
         Swal.fire({
           toast: true,
           icon: 'danger',
-          title: 'Error al actulizar equipo',
+          title: 'Error al actualizar equipo',
           animation: false,
           position: 'top-end',
           showConfirmButton: false,

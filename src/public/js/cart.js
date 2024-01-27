@@ -93,7 +93,7 @@ async function obtenerDetallesProductoDesdeAPI(id) {
         .then((response) => response.json())
         .then((data) => data)
         .catch((error) => {
-            console.error('Error al obtener detalles del producto', error);
+            console.log(error);
             return null;
         });
 }

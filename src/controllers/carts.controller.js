@@ -46,7 +46,7 @@ router.get('/', async (req, res) => {
         res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
       }
 }
-
+ 
 );
 router.get('/view', async (req, res) => {
   try {
@@ -70,7 +70,6 @@ router.get('/view', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    console.log(req.body);
     const { userId, nombre, direccion, email, items } = req.body;
     if (!userId || !nombre || !direccion || !email || !items) {
       return res
@@ -151,5 +150,24 @@ router.delete('/:cid', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsService.getProductById(id);
+
+    if (!product) {
+      return res
+        .status(HTTP_RESPONSES.NOT_FOUND)
+        .json({ status: 'error', error: 'Product not found' });
+    }
+     
+    res.json({ status: 'success', payload: product });
+  } catch (error) {
+    console.log(error)
+    res
+      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+      .json({ status: 'error', error });
+  }
+});
 
 module.exports = router;

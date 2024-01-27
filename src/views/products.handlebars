@@ -113,7 +113,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form method="POST" action="/productcatalog">
+        <form method="POST" action="/products">
           <div class="row mb-3">
             <div class="col">
               <label for="title" class="col-form-label">Título:</label>
@@ -139,7 +139,7 @@
           <div class="row mb-3">
             <div class="col">
               <label for="category" class="col-form-label">Categoría Equipo:</label>
-              <select class="form-select" id="category" name="category">
+              <select class="form-select" id="category" name="category" required>
                   <option value="" selected>Seleccione categorías</option>
                   <option value="Laptops">Laptops</option>
                   <option value="PCs">PCs</option>
@@ -216,7 +216,7 @@
             </div>
             <div class="col-md-6">
               <label for="editCategory" class="form-label">Categoría Equipo:</label>
-              <select class="form-select" id="editCategory" name="category" >
+              <select class="form-select" id="editCategory" name="category" required>
                 <option value="" selected>Seleccione categorías</option>
                 <option value="Laptops">Laptops</option>
                 <option value="PCs">PCs</option>

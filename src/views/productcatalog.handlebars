@@ -127,6 +127,16 @@ document.getElementById('continueToCheckout').addEventListener('click', function
     localStorage.setItem('cartData', JSON.stringify(cartData));
     window.location.href = '/paycheckout';
 });
+document.getElementById('searchButton').addEventListener('click', function() {
+  const searchInput = document.getElementById('search').value;
+  const categorySelect = document.getElementById('categorySelect').value;
+  const sortSelect = document.getElementById('sortSelect').value;
+  let query = '?';
+  if (searchInput) query += `search=${searchInput}&`;
+  if (categorySelect) query += `category=${categorySelect}&`;
+  if (sortSelect) query += `sort=${sortSelect}&`;
+  window.location.href = `/productcatalog${query}`;
+});
 </script>
 
 
