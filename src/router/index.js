@@ -11,6 +11,7 @@ const router = (app, io) => {
   app.use('/messages', messagecontroller);
   app.use('/productcatalog', cartcontroller);
   app.use('/paycheckout', paycheckoutcontroller);
+  app.use('/listcarts', cartcontroller);
 };
 
 module.exports = router;

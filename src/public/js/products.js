@@ -170,7 +170,7 @@ function saveProductChanges() {
       } else {
         Swal.fire({
           toast: true,
-          icon: 'dager',
+          icon: 'danger',
           title: 'Error al actulizar equipo',
           animation: false,
           position: 'top-end',

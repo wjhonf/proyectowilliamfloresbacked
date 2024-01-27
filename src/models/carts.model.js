@@ -6,7 +6,18 @@ const cartSchema = new mongoose.Schema({
   userId: {
     type: String,
     required: true,
-    unique: true
+  },
+  nombre: {
+    type: String,
+    required: true
+  },
+  direccion: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
   },
   items: [
     {
@@ -34,6 +45,7 @@ const cartSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
 const Cart = mongoose.model(cartCollection, cartSchema);
 
 module.exports = Cart;

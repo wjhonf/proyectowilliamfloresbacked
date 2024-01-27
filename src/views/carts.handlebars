@@ -1,0 +1,49 @@
+<br>
+<div class="card">
+    <div class="card-header">
+      <div class="row">
+          <div class="col-md-6">
+         Lista de Carrito
+          </div>
+          
+      </div>
+  </div>
+  <div class="card-body">
+    <div class="row filtro">
+
+        <div class="col-md-4">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="startDateAddon">Desde:</span>
+            <input type="date" class="form-control" id="startDate" name="startDate" aria-describedby="startDateAddon">
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="endDateAddon">Hasta:</span>
+            <input type="date" class="form-control" id="endDate" name="endDate" aria-describedby="endDateAddon">
+        </div>
+    </div>
+
+      <div class="col-md-4">
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" id="searchButton" class="btn btn-outline-info">Buscar</button>
+            </div>
+      </div>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+              {{#each cartsData}}
+                  <div class="col">
+                      <div class="card">
+                          <div class="card-body">
+                            <h6 class="card-title">Datos Cliente</h6>
+                            <p class="card-text">
+                              Nombre: {{this.nombre}}<br>
+                              Dirección: {{this.direccion}}<br>
+                              Total: {{this.direccion}}<br>
+                            </p>
+                            <button type="button" class="btn btn-warning btn-sm btn-comprar"> <i class="bi bi-cart" data-id="{{this.productIds}}" id="detalle"></i>Ver Detalle</button>
+                          </div>
+                      </div>
+                  </div>
+              {{/each}} 
+          </div>

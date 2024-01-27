@@ -48,42 +48,19 @@ router.get('/', async (req, res) => {
 }
 
 );
-/*
-router.get('/', async (req, res) => {
+router.get('/view', async (req, res) => {
   try {
-    const carts = await cartsService.getAll();
-    res.json({ status: 'success', payload: carts });
-  } catch (error) {
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error });
-  }
-});*/
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const product = await productsService.getProductById(id);
-
-    if (!product) {
-      return res
-        .status(HTTP_RESPONSES.NOT_FOUND)
-        .json({ status: 'error', error: 'Product not found' });
-    }
-     
-    res.json({ status: 'success', payload: product });
-  } catch (error) {
-    console.log(error)
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error });
-  }
-});
-
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const cart = await cartsService.getOneById(id);
-    res.json({ status: 'success', payload: cart });
+    const listcarts = await cartsService.getAll();
+    const filteredCarts = listcarts.map(cart => {
+    const productIds = cart.items.map(item => item.productId);
+      return {
+        id: cart._id,
+        nombre: cart.nombre,
+        direccion: cart.direccion,
+        productIds: productIds  
+      };
+    });
+    res.render('carts', { cartsData: filteredCarts });
   } catch (error) {
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
@@ -93,43 +70,80 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const newCartData = req.body;
+    console.log(req.body);
+    const { userId, nombre, direccion, email, items } = req.body;
+    if (!userId || !nombre || !direccion || !email || !items) {
+      return res
+        .status(HTTP_RESPONSES.BAD_REQUEST)
+        .json({ status: 'error', error: 'Faltan datos del carrito o del usuario' });
+    }
+    if (!Array.isArray(items) || !items.every(item => item.productId && typeof item.quantity === 'number')) {
+      return res
+        .status(HTTP_RESPONSES.BAD_REQUEST)
+        .json({ status: 'error', error: 'Datos de productos inválidos' });
+    }
+    const newCartData = { userId, nombre, direccion, email, items };
     const newCart = await cartsService.insertOne(newCartData);
     res
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: newCart });
   } catch (error) {
+    console.log(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error });
+      .json({ status: 'error', error: error.message });
   }
 });
-
-router.put('/:cartId', async (req, res) => {
+router.delete('/:cid/products/:pid', async (req, res) => {
   try {
-    const { cartId } = req.params;
-    const updateData = req.body;
+    const { cid, pid } = req.params;
+    await cartsService.removeProductFromCart(cid, pid);
     
-    await Cart.updateOne({ _id: cartId }, updateData);
-
-    const updatedCart = await cartsService.getOneById(cartId);
     res
       .status(HTTP_RESPONSES.OK)
-      .json({ status: 'success', payload: updatedCart });
+      .json({ status: 'success', message: 'Product removed from cart successfully' });
   } catch (error) {
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
   }
 });
-
-router.delete('/:cartId', async (req, res) => {
+router.put('/:cid', async (req, res) => {
   try {
-    const { cartId } = req.params;
-    await cartsService.deleteOne(cartId);
+    const { cid } = req.params;
+    const updatedCartData = req.body;
+    await cartsService.updateCart(cid, updatedCartData);
     res
       .status(HTTP_RESPONSES.OK)
-      .json({ status: 'success', message: 'Cart deleted successfully' });
+      .json({ status: 'success', message: 'Cart updated successfully' });
+  } catch (error) {
+    res
+      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+      .json({ status: 'error', error });
+  }
+});
+router.put('/:cid/products/:pid', async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const { quantity } = req.body;
+    await cartsService.updateProductQuantity(cid, pid, quantity);
+    
+    res
+      .status(HTTP_RESPONSES.OK)
+      .json({ status: 'success', message: 'Product quantity updated successfully' });
+  } catch (error) {
+    res
+      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+      .json({ status: 'error', error });
+  }
+});
+router.delete('/:cid', async (req, res) => {
+  try {
+    const { cid } = req.params;
+    await cartsService.removeAllProductsFromCart(cid);
+    res
+      .status(HTTP_RESPONSES.OK)
+      .json({ status: 'success', message: 'All products removed from cart successfully' });
   } catch (error) {
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)

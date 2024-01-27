@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="card-body">
-        <form id="checkoutForm" action="/checkout" method="post">
+        <form id="checkoutForm" action="/productcatalog" method="post">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <h5 class="fs-6">Información del Usuario</h5>
@@ -131,5 +131,72 @@ function renderizarDetallesDelCarrito() {
         contenedorDetallesCarrito.insertAdjacentHTML('beforeend', resumenPago);
     }
 }
+document.getElementById('checkoutForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (!this.nombre.value || !this.direccion.value || !this.email.value) {
+        Swal.fire({
+                title: 'Campos Vacios',
+                text: 'Por favor completar todos los campos',
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-warning'
+                }})
+        return;
+    }
+    const cartData = JSON.parse(localStorage.getItem('cartData')) || [];
+    if (!cartData.length) {
+        Swal.fire({
+                title: 'Carrito vacío',
+                text: 'Por favor, seleccione al menos un equipo para continuar',
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-warning'
+                }})
+        return;
+    }
+    const adaptedItems = cartData.map(item => ({
+        productId: item.id, 
+        quantity: item.cantidad
+    }));
+    const dataToSend = {
+        userId: '34', 
+        nombre: this.nombre.value,
+        direccion: this.direccion.value,
+        email: this.email.value,
+        items: adaptedItems
+    };
+    fetch('/productcatalog', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        Swal.fire({
+                title: 'Compras Online',
+                text: 'Compra Exitosa',
+                icon: 'info',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-warning'
+    }})
+        window.location.href = '/productcatalog';
+    })
+    .catch((error) => {
+        Swal.fire({
+                title: 'Error al realizar comora',
+                text: 'Compra Erronea',
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-warning'
+                }})
+    }); 
+});
 </script>
 
