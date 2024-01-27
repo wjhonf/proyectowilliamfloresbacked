@@ -1,0 +1,132 @@
+
+<div class="card">
+    <div class="card-header">
+      <div class="row">
+          <div class="col-md-6">
+          Catalogo de Equipo En Venta
+          </div>
+      </div>
+  </div>
+  <div class="card-body">
+    <div class="row filtro">
+      <div class="col-md-3">
+          <div class="input-group mb-3">
+              <input type="text" name="search"  id="search" class="form-control" placeholder="Buscar Equipo" aria-label="Ingresar Equipo">
+          </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group mb-3">
+        <select class="form-select" id="categorySelect">
+            <option value="" selected>Seleccione categorías</option>
+            <option value="Laptops">Laptops</option>
+            <option value="PCs">PCs</option>
+            <option value="Impresoras">Impresoras</option>
+            <option value="Equipos de Red">Equipos de Red</option>
+        </select>
+      </div>
+
+      </div>
+      <div class="col-md-3">
+          <div class="input-group mb-3">
+            <select class="form-select" id="sortSelect">
+              <option value="" selected>Order By</option>
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
+         </div>
+      </div>
+      <div class="col-md-3">
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" id="searchButton" class="btn btn-outline-info">Buscar</button>
+            </div>
+      </div>
+    </div>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+          {{#each products}}
+              <div class="col">
+                  <div class="card">
+                    <img src="{{this.thumbnail}}" alt="Imagen de equipo" style="width: 15%; height: auto;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{this.title}} - ({{this.category}})</h5>
+                        <p class="card-text">
+                          Código: {{this.code}}<br>
+                          Descripción: {{this.description}}<br>
+                          Precio: ${{this.price}}<br>
+                          Estado: {{#if this.status}}Disponible{{else}}Agotado{{/if}}<br>
+                          Stock: {{this.stock}} unidades<br>
+                        </p>
+                        <button type="button" class="btn btn-warning btn-sm btn-comprar"> <i class="bi bi-cart" data-id="{{this._id}}" id="comprar"></i>Comprar</button>
+                      </div>
+                  </div>
+              </div>
+          {{/each}} 
+      </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {{#if hasPrevPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{prevLink}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Atras</span>
+              </a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo; Atras</span>
+            </li>
+          {{/if}}
+          {{#each pages}}
+            <li class="page-item{{#if this.isCurrent}} active{{/if}}">
+              <a class="page-link" href="{{this.url}}">{{this.number}}</a>
+            </li>
+          {{/each}}
+          {{#if hasNextPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{nextLink}}" aria-label="Next">
+                <span aria-hidden="true">Siguiente &raquo;</span>
+              </a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <span class="page-link">Siguiente &raquo;</span>
+            </li>
+          {{/if}}
+        </ul>
+     </nav>
+  </div>
+</div>
+
+<div class="modal fade" id="modalDetalleCarrito" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title flex-grow-1">Detalles del Carrito</h5>
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="btnAgregarMas">
+                      Agregar Más
+                  </button>
+  
+            </div>
+          <div class="modal-body" id="contenidoModal">
+          </div>
+          <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnCerrar">
+                                            Cancelar</button>
+                  <button type="button" class="btn btn-info" id="continueToCheckout">Continuar</button>
+
+          </div>
+                </div>
+            </div>
+        </div>
+
+<br>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+document.getElementById('continueToCheckout').addEventListener('click', function() {
+    const cartData = obtenerDatosDelCarrito();
+    localStorage.setItem('cartData', JSON.stringify(cartData));
+    window.location.href = '/paycheckout';
+});
+</script>
+
+

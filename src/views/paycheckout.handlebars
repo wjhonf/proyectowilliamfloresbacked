@@ -1,0 +1,135 @@
+<br>
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                Catálogo de Equipo En Venta
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="checkoutForm" action="/checkout" method="post">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <h5 class="fs-6">Información del Usuario</h5>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección:</label>
+                        <input type="text" class="form-control" id="direccion" name="direccion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="fs-6">Detalles del Pago</h5>
+                    <div class="mb-3">
+                        <label for="tarjeta" class="form-label">Número de Tarjeta:</label>
+                        <input type="text" class="form-control" id="tarjeta" name="tarjeta" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vencimiento" class="form-label">Fecha de Vencimiento:</label>
+                        <input type="text" class="form-control" id="vencimiento" name="vencimiento" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cvv" class="form-label">CVV:</label>
+                        <input type="text" class="form-control" id="cvv" name="cvv" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <h5 class="fs-6">Detalles de Compra</h5>
+                    <div id="cartDetails">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                    <button type="button" class="btn btn-danger btn-sm">
+                         Cancelar
+                        </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block btn-sm">Confirmar y Pagar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    renderizarDetallesDelCarrito();
+});
+
+function calcularTotales(datosDelCarrito, tasaIVA) {
+    let subtotal = 0;
+    datosDelCarrito.forEach(item => {
+        subtotal += item.cantidad * item.precio;
+    });
+    const iva = subtotal * tasaIVA;
+    const total = subtotal + iva;
+
+    return { subtotal, iva, total };
+}
+
+function renderizarDetallesDelCarrito() {
+    const datosDelCarrito = JSON.parse(localStorage.getItem('cartData')) || [];
+    const contenedorDetallesCarrito = document.getElementById('cartDetails');
+
+    if (datosDelCarrito.length === 0) {
+        contenedorDetallesCarrito.innerHTML = '<p>El carrito está vacío.</p>';
+    } else {
+        let tabla = '<table class="table table-striped"><thead class="thead-dark"><tr><th>Descripción</th><th>Cantidad</th><th>Precio</th><th>Importe</th></tr></thead><tbody>';
+
+        datosDelCarrito.forEach((item) => {
+            const importe = item.cantidad * item.precio;
+            tabla += `
+                <tr>
+                    <td>${item.equipo}</td>
+                    <td>${item.cantidad}</td>
+                    <td>$${item.precio.toFixed(2)}</td>
+                    <td>$${importe.toFixed(2)}</td>
+                </tr>
+            `;
+        });
+
+        tabla += '</tbody></table>';
+        contenedorDetallesCarrito.innerHTML = tabla;
+        const tasaIVA = 0.18; 
+        const totales = calcularTotales(datosDelCarrito, tasaIVA);
+        const resumenPago = `
+            <div class="row justify-content-end mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Resumen de Pago</h5>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Subtotal
+                                    <span class="badge-primary">$${totales.subtotal.toFixed(2)}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    IVA (${(tasaIVA * 100).toFixed(0)}%)
+                                    <span class="badge-primary">$${totales.iva.toFixed(2)}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    Total
+                                    <span class="badge-primary">$${totales.total.toFixed(2)}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        contenedorDetallesCarrito.insertAdjacentHTML('beforeend', resumenPago);
+    }
+}
+</script>
+

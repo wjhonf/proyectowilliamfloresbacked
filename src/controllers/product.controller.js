@@ -44,7 +44,6 @@ const agregarProducto = (producto, io) => {
     console.error(`Error al agregar producto a ${archivo}:`, error.message);
   }
 };
-
 const setup = (io) => {
   router.get('/home', (req, res) => {
     const equipos = obtenerEquipos();

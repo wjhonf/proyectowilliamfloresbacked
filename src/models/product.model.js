@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
-const productCollection = 'products';
+const productCollection = 'product';
 
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    index:true
   },
   description: String,
   code: {
@@ -25,7 +26,11 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  category: String,
+  category: {
+    type: String,
+    required: true,
+    index: true
+  },
   thumbnail: {
     type: String,
     default: "img/equipo3.jpg"

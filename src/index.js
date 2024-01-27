@@ -6,10 +6,12 @@ const { Server } = require('socket.io');
 const axios = require('axios');
 const app = express();
 const mongoConnect= require('./db');
-
+const path = require('path');
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(process.cwd() + '/src/public'));
+//app.use('/img', express.static(process.cwd() + '/src/public/img'));
+//app.use(express.static(path.join(__dirname, 'public')));
 // Configuración de Handlebars
 app.engine('handlebars', handlebars.engine());
 app.set('views', process.cwd() + '/src/views');

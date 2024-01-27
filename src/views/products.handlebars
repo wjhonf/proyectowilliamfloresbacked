@@ -1,0 +1,249 @@
+
+<div class="card">
+    <div class="card-header">
+      <div class="row">
+          <div class="col-md-6">
+          Catalogo de Equipo En Venta
+          </div>
+          <div class="col-md-6">
+              <div class="d-flex justify-content-end mb-3">
+                  <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Registrar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="card-body">
+    <div class="row filtro">
+      <div class="col-md-3">
+          <div class="input-group mb-3">
+              <input type="text" name="search"  id="search" class="form-control" placeholder="Buscar Equipo" aria-label="Ingresar Equipo">
+          </div>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group mb-3">
+        <select class="form-select" id="categorySelect">
+            <option value="" selected>Seleccione categorías</option>
+            <option value="Laptops">Laptops</option>
+            <option value="PCs">PCs</option>
+            <option value="Impresoras">Impresoras</option>
+            <option value="Equipos de Red">Equipos de Red</option>
+        </select>
+      </div>
+
+      </div>
+      <div class="col-md-3">
+          <div class="input-group mb-3">
+            <select class="form-select" id="sortSelect">
+              <option value="" selected>Order By</option>
+              <option value="asc">Ascendente</option>
+              <option value="desc">Descendente</option>
+            </select>
+         </div>
+      </div>
+      <div class="col-md-3">
+            <div class="d-flex justify-content-end mb-3">
+                <button type="button" id="searchButton" class="btn btn-outline-info">Buscar</button>
+            </div>
+      </div>
+    </div>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+          {{#each products}}
+              <div class="col">
+                  <div class="card">
+                    <img src="{{this.thumbnail}}" alt="Imagen de equipo" style="width: 15%; height: auto;">
+                      <div class="card-body">
+                        <h5 class="card-title">{{this.title}} - ({{this.category}})</h5>
+                        <p class="card-text">
+                          Código: {{this.code}}<br>
+                          Descripción: {{this.description}}<br>
+                          Precio: ${{this.price}}<br>
+                          Estado: {{#if this.status}}Disponible{{else}}Agotado{{/if}}<br>
+                          Stock: {{this.stock}} unidades<br>
+                        </p>
+                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{this._id}}" onclick="loadProductData(this.getAttribute('data-id'))">
+                          <i class="bi bi-pencil-fill"></i>Editar
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{this._id}}" onclick="setProductIdToDelete(this.getAttribute('data-id'))">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                  </div>
+              </div>
+          {{/each}} 
+      </div>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          {{#if hasPrevPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{prevLink}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo; Atras</span>
+              </a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <span class="page-link">&laquo; Atras</span>
+            </li>
+          {{/if}}
+          {{#each pages}}
+            <li class="page-item{{#if this.isCurrent}} active{{/if}}">
+              <a class="page-link" href="{{this.url}}">{{this.number}}</a>
+            </li>
+          {{/each}}
+          {{#if hasNextPage}}
+            <li class="page-item">
+              <a class="page-link" href="{{nextLink}}" aria-label="Next">
+                <span aria-hidden="true">Siguiente &raquo;</span>
+              </a>
+            </li>
+          {{else}}
+            <li class="page-item disabled">
+              <span class="page-link">Siguiente &raquo;</span>
+            </li>
+          {{/if}}
+        </ul>
+     </nav>
+  </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Registro de Equipo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="/productcatalog">
+          <div class="row mb-3">
+            <div class="col">
+              <label for="title" class="col-form-label">Título:</label>
+              <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="col">
+              <label for="code" class="col-form-label">Código:</label>
+              <input type="text" class="form-control" id="code" name="code" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col">
+              <label for="price" class="col-form-label">Precio:</label>
+              <input type="number" class="form-control" id="price" name="price" required>
+            </div>
+            <div class="col">
+              <label for="stock" class="col-form-label">Stock:</label>
+              <input type="number" class="form-control" id="stock" name="stock" required>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col">
+              <label for="category" class="col-form-label">Categoría Equipo:</label>
+              <select class="form-select" id="category" name="category">
+                  <option value="" selected>Seleccione categorías</option>
+                  <option value="Laptops">Laptops</option>
+                  <option value="PCs">PCs</option>
+                  <option value="Impresoras">Impresoras</option>
+                  <option value="Equipos de Red">Equipos de Red</option>
+              </select>
+            </div>
+            <div class="col">
+              <label for="thumbnail" class="col-form-label">Ruta Imagen Rf:</label>
+              <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="../img/equipo6.jpg" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="description" class="col-form-label">Descripción Equipo:</label>
+            <textarea class="form-control" id="description" name="description"></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-info">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Eliminar Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar este producto?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" onclick="deleteProduct()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Edición -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm" class="row g-3"> 
+            <div class="col-md-6">
+              <label for="editTitle" class="form-label">Título:</label>
+              <input type="text" class="form-control" id="id" name="id" hidden>
+              <input type="text" class="form-control" id="editTitle" name="title" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editCode" class="form-label">Código:</label>
+              <input type="text" class="form-control" id="editCode" name="code" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editPrice" class="form-label">Precio:</label>
+              <input type="number" class="form-control" id="editPrice" name="price" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editStock" class="form-label">Stock:</label>
+              <input type="number" class="form-control" id="editStock" name="stock" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editCategory" class="form-label">Categoría Equipo:</label>
+              <select class="form-select" id="editCategory" name="category" >
+                <option value="" selected>Seleccione categorías</option>
+                <option value="Laptops">Laptops</option>
+                <option value="PCs">PCs</option>
+                <option value="Impresoras">Impresoras</option>
+                <option value="Equipos de Red">Equipos de Red</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="editThumbnail" class="form-label">Thumbnail (URL):</label>
+              <input type="text" class="form-control" id="editThumbnail" name="thumbnail" required>
+            </div>
+            <div class="col-12">
+              <label for="editDescription" class="form-label">Descripción:</label>
+              <textarea class="form-control" id="editDescription" name="description" required></textarea>
+            </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-info" onclick="saveProductChanges()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/products.js"></script>
+
+
