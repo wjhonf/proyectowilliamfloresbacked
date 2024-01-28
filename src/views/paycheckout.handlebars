@@ -66,7 +66,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     renderizarDetallesDelCarrito();
 });
-
+let totalesGlobales = { subtotal: 0, iva: 0, total: 0 };
 function calcularTotales(datosDelCarrito, tasaIVA) {
     let subtotal = 0;
     datosDelCarrito.forEach(item => {
@@ -103,6 +103,7 @@ function renderizarDetallesDelCarrito() {
         contenedorDetallesCarrito.innerHTML = tabla;
         const tasaIVA = 0.18; 
         const totales = calcularTotales(datosDelCarrito, tasaIVA);
+        totalesGlobales = totales;
         const resumenPago = `
             <div class="row justify-content-end mt-4">
                 <div class="col-md-6">
@@ -165,7 +166,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(even
         nombre: this.nombre.value,
         direccion: this.direccion.value,
         email: this.email.value,
-        items: adaptedItems
+        items: adaptedItems,
+        totalPrice:totalesGlobales.subtotal
     };
     fetch('/productcatalog', {
         method: 'POST',

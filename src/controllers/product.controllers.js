@@ -68,6 +68,23 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
+router.get('/details/:cartId', async (req, res) => {
+  try {
+      const cartId = req.params.cartId;
+      const cartDetails = await cartsService.getCartDetails(cartId);
+
+      if (!cartDetails) {
+          return res.status(HTTP_RESPONSES.NOT_FOUND)
+                    .json({ status: 'error', message: 'Carrito no encontrado' });
+      }
+
+      res.render('cart-details', { cartDetails });
+  } catch (error) {
+      res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+         .json({ status: 'error', error: error.message });
+  }
+});
+
 router.post('/', async (req, res) => {
   try {
     const { title, description, code, price, stock, category, thumbnail } = req.body;

@@ -6,6 +6,10 @@ function actualizarContadorCarrito() {
     contadorCarrito.innerText = carrito.length;
 }
 document.addEventListener('DOMContentLoaded', function() {
+    const enlaceCarrito = document.getElementById('micarrito');
+    enlaceCarrito.classList.remove('d-none');
+    enlaceCarrito.style.display = 'inline-block'; 
+
     const verDetalle = document.getElementById('micarrito');
     const botonesComprar = document.querySelectorAll('.btn-comprar');
     contadorCarrito = document.getElementById('contadorCarrito');
@@ -182,3 +186,4 @@ function obtenerDatosDelCarrito() {
         };
     });
 }
+
