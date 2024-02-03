@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-
+const mongoosePaginate = require('mongoose-paginate-v2');
 const cartCollection = 'carts';
-
 const cartSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -45,7 +44,6 @@ const cartSchema = new mongoose.Schema({
     default: Date.now
   }
 });
-
+cartSchema.plugin(mongoosePaginate);
 const Cart = mongoose.model(cartCollection, cartSchema);
-
 module.exports = Cart;

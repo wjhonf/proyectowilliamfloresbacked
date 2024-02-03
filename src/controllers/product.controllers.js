@@ -2,54 +2,37 @@ const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
 const Product = require('../models/product.model');
 const productsService = require('../services/products.service');
+const authMiddleware = require('../middleware/auth.middleware')
 const fs = require('fs');
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
-      let { limit, page, sort, category, status , search } = req.query;
-      if (status === undefined) {
-        status = 'true';
-      }
-      const response = await productsService.getAll({ limit, page, sort, category, status,search  });
-      const totalPages = Math.ceil(response.total / response.limit);
-      const hasPrevPage = response.page > 1;
-      const hasNextPage = response.page < totalPages;
-      const prevPage = hasPrevPage ? response.page - 1 : null;
-      const nextPage = hasNextPage ? response.page + 1 : null;
-      const baseUrl = req.baseUrl + req.path;
-      const pages = [];
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push({
-          number: i,
-          url: `${baseUrl}?page=${i}`,
-          isCurrent: i === parseInt(page, 10),
-        });
-      }
-      const result = {
-        status: 'success',
-        payload: response.products,
-        totalPages,
-        prevPage,
-        nextPage,
-        page: response.page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink: hasPrevPage ? `${baseUrl}?page=${prevPage}` : null,
-        nextLink: hasNextPage ? `${baseUrl}?page=${nextPage}` : null,
-        products: response.products,
-        pages
-      };
-      res.render('products', result);
-      } catch (error) {
-        console.log(error);
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
-      }
-}
- 
-);
+    const params = { ...req.query };
+    const response = await productsService.getAll(params);
+    const productsData = response.docs.map(product => ({
+      id:product._id,
+      title: product.title,
+      description: product.description,
+      code: product.code,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      status: product.status,
+      stock: product.stock,
+      category: product.category,
+    }));
+    res.render('products', {
+      products: productsData,
+      user: req.session.user,
+      pagination: response,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
 
-router.get('/:id', async (req, res) => {
+router.get('/:id',authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
@@ -68,7 +51,7 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.get('/details/:cartId', async (req, res) => {
+router.get('/details/:cartId',authMiddleware, async (req, res) => {
   try {
       const cartId = req.params.cartId;
       const cartDetails = await cartsService.getCartDetails(cartId);
@@ -85,7 +68,7 @@ router.get('/details/:cartId', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/',authMiddleware, async (req, res) => {
   try {
     const { title, description, code, price, stock, category, thumbnail } = req.body;
 
@@ -94,7 +77,7 @@ router.post('/', async (req, res) => {
         .status(HTTP_RESPONSES.BAD_REQUEST)
         .json({ status: 'error', error: 'Incomplete or invalid product data' });
     }
-
+    
     const newProductInfo = {
       title,
       description,
@@ -106,13 +89,11 @@ router.post('/', async (req, res) => {
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-
     const newProduct = await productsService.insertOne(newProductInfo);
-    
-    res.redirect('/products');
-    /*res
+    res
       .status(HTTP_RESPONSES.CREATED)
-      .json({ status: 'success', payload: newProduct });*/
+      .json({ status: 'success', payload: 'Equipo registrado exitosamente'});
+    //res.redirect('/products');
   } catch (error) {
     console.log(error)
     res
@@ -120,7 +101,7 @@ router.post('/', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:id', async (req, res) => {
+router.put('/:id',authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, code, price, stock, category, thumbnail } = req.body;
@@ -152,9 +133,8 @@ router.put('/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',authMiddleware,  async (req, res) => {
   try {
-    console.log(req.params)
     const { id } = req.params;
     await productsService.deleteProductById(id);
     res

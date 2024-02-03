@@ -1,29 +1,33 @@
 const Carts = require('../../models/carts.model');
-
 class CartDAO {
   async tomaTodo({ limit = 10, page = 1, fromDate, toDate } = {}) {
     let query = {};
-
     if (fromDate || toDate) {
       query.createdAt = {};
       if (fromDate) {
-        query.createdAt.$gte = new Date(fromDate);
+        let fromDateObject = new Date(fromDate);
+        fromDateObject.setUTCHours(0, 0, 0, 0);
+        query.createdAt.$gte = fromDateObject;
       }
       if (toDate) {
         let toDateObject = new Date(toDate);
-        toDateObject.setHours(23, 59, 59, 999);
+        toDateObject.setUTCHours(23, 59, 59, 999);
         query.createdAt.$lte = toDateObject;
       }
     }
-    const carts = await Carts.find(query)
-      .limit(limit)
-      .skip((page - 1) * limit)
-      .lean()
-      .exec();
-    
-    const total = await Carts.countDocuments(query);
+    const sortOrder = { createdAt: -1 }; 
+    const options = {
+      page: parseInt(page, 10),
+      limit: parseInt(limit, 10),
+      sort: sortOrder,
+    };
 
-    return { carts, total, limit, page };
+    try {
+      const response = await Carts.paginate(query, options);
+      return response;
+    } catch (error) {
+      throw error;
+    }
   }
   async creamosUno(newCartInfo) {
     try {

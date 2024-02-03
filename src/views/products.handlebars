@@ -46,65 +46,64 @@
             </div>
       </div>
     </div>
-      <div class="row row-cols-1 row-cols-md-3 g-4">
+       <div class="row row-cols-1 row-cols-md-3 g-4">
           {{#each products}}
-              <div class="col">
-                  <div class="card">
-                    <img src="{{this.thumbnail}}" alt="Imagen de equipo" style="width: 15%; height: auto;">
-                      <div class="card-body">
-                        <h5 class="card-title">{{this.title}} - ({{this.category}})</h5>
-                        <p class="card-text">
-                          Código: {{this.code}}<br>
-                          Descripción: {{this.description}}<br>
-                          Precio: ${{this.price}}<br>
-                          Estado: {{#if this.status}}Disponible{{else}}Agotado{{/if}}<br>
-                          Stock: {{this.stock}} unidades<br>
-                        </p>
-                        <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{this._id}}" onclick="loadProductData(this.getAttribute('data-id'))">
-                          <i class="bi bi-pencil-fill"></i>Editar
-                        </button>
-                        <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{this._id}}" onclick="setProductIdToDelete(this.getAttribute('data-id'))">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
-                  </div>
+            <div class="col">
+              <div class="card">
+                <img src="{{thumbnail}}" class="card-img-top" alt="Imagen de equipo" style="width: 15%; height: auto;">
+                <div class="card-body">
+                  <h5 class="card-title">{{title}} - ({{category}})</h5>
+                  <p class="card-text">
+                    Código: {{code}}<br>
+                    Descripción: {{description}}<br>
+                    Precio: ${{price}}<br>
+                    Estado: {{#if status}}Disponible{{else}}Agotado{{/if}}<br>
+                    Stock: {{stock}} unidades<br>
+                  </p>
+                  <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editModal" data-id="{{id}}" onclick="loadProductData(this.getAttribute('data-id'))">
+                    <i class="bi bi-pencil-fill"></i> Editar
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{id}}" onclick="setProductIdToDelete(this.getAttribute('data-id'))">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
               </div>
-          {{/each}} 
-      </div>
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          {{#if hasPrevPage}}
-            <li class="page-item">
-              <a class="page-link" href="{{prevLink}}" aria-label="Previous">
-                <span aria-hidden="true">&laquo; Atras</span>
-              </a>
-            </li>
-          {{else}}
-            <li class="page-item disabled">
-              <span class="page-link">&laquo; Atras</span>
-            </li>
-          {{/if}}
-          {{#each pages}}
-            <li class="page-item{{#if this.isCurrent}} active{{/if}}">
-              <a class="page-link" href="{{this.url}}">{{this.number}}</a>
-            </li>
+            </div>
           {{/each}}
-          {{#if hasNextPage}}
-            <li class="page-item">
-              <a class="page-link" href="{{nextLink}}" aria-label="Next">
-                <span aria-hidden="true">Siguiente &raquo;</span>
-              </a>
-            </li>
-          {{else}}
-            <li class="page-item disabled">
-              <span class="page-link">Siguiente &raquo;</span>
-            </li>
-          {{/if}}
-        </ul>
-     </nav>
-  </div>
-</div>
+       </div>
+<nav aria-label="Pagination">
+  <ul class="pagination justify-content-center">
 
+    {{#if pagination.hasPrevPage}}
+      <li class="page-item">
+        <a class="page-link" href="/products?page={{pagination.prevPage}}" aria-label="Anterior">
+          Anterior
+        </a>
+      </li>
+    {{else}}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">Anterior</span>
+      </li>
+    {{/if}}
+
+    <li class="page-item disabled">
+      <span class="page-link">{{pagination.page}}</span>
+    </li>
+
+    {{#if pagination.hasNextPage}}
+      <li class="page-item">
+        <a class="page-link" href="/products?page={{pagination.nextPage}}" aria-label="Siguiente">
+          Siguiente
+        </a>
+      </li>
+    {{else}}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">Siguiente</span>
+      </li>
+    {{/if}}
+
+  </ul>
+</nav>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -160,7 +159,7 @@
 
           <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-info">Guardar</button>
+            <button type="submit" class="btn btn-info" id="guardarequipo">Guardar</button>
           </div>
         </form>
       </div>

@@ -2,92 +2,59 @@ const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
 const Cart = require('../models/carts.model');
 const productsService = require('../services/products.service');
+const authMiddleware = require('../middleware/auth.middleware')
 const cartsService = require('../services/carts.service');
 const router = Router();
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
-      let { limit, page, sort, category, status , search } = req.query;
-      if (status === undefined) {
-        status = 'true';
-      }
-      const response = await productsService.getAll({ limit, page, sort, category, status,search  });
-      const totalPages = Math.ceil(response.total / response.limit);
-      const hasPrevPage = response.page > 1;
-      const hasNextPage = response.page < totalPages;
-      const prevPage = hasPrevPage ? response.page - 1 : null;
-      const nextPage = hasNextPage ? response.page + 1 : null;
-      const baseUrl = req.baseUrl + req.path;
-      const pages = [];
-      for (let i = 1; i <= totalPages; i++) {
-        pages.push({
-          number: i,
-          url: `${baseUrl}?page=${i}`,
-          isCurrent: i === parseInt(page, 10),
-        });
-      }
-      const result = {
-        status: 'success',
-        payload: response.products,
-        totalPages,
-        prevPage,
-        nextPage,
-        page: response.page,
-        hasPrevPage,
-        hasNextPage,
-        prevLink: hasPrevPage ? `${baseUrl}?page=${prevPage}` : null,
-        nextLink: hasNextPage ? `${baseUrl}?page=${nextPage}` : null,
-        products: response.products,
-        pages
-      };
-      res.render('productcatalog', result);
-      } catch (error) {
-        console.log(error);
-        res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
-      }
-}
- 
-);
-router.get('/view', async (req, res) => {
-  try {
-    let { limit, page, fromDate, toDate } = req.query;
-    limit = limit ? parseInt(limit, 10) : 10;
-    page = page ? parseInt(page, 10) : 1;
-    const response = await cartsService.getAll({ limit, page, fromDate, toDate });
-    const totalPages = Math.ceil(response.total / response.limit);
-    const hasPrevPage = response.page > 1;
-    const hasNextPage = response.page < totalPages;
-    const prevPage = hasPrevPage ? response.page - 1 : null;
-    const nextPage = hasNextPage ? response.page + 1 : null;
-    const baseUrl = req.baseUrl + req.path;
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push({
-        number: i,
-        url: `${baseUrl}?page=${i}&limit=${limit}${fromDate ? `&fromDate=${fromDate}` : ''}${toDate ? `&toDate=${toDate}` : ''}`,
-        isCurrent: i === page,
-      });
-    }
-    const result = {
-      status: 'success',
-      carts: response.carts,
-      totalPages,
-      prevPage,
-      nextPage,
-      page: response.page,
-      hasPrevPage,
-      hasNextPage,
-      prevLink: hasPrevPage ? `${baseUrl}?page=${prevPage}&limit=${limit}` : null,
-      nextLink: hasNextPage ? `${baseUrl}?page=${nextPage}&limit=${limit}` : null,
-      pages
-    };
-    res.render('carts', result);
+    const params = { ...req.query };
+    const response = await productsService.getAll(params);
+    const productsData = response.docs.map(product => ({
+      id:product._id,
+      title: product.title,
+      description: product.description,
+      code: product.code,
+      thumbnail: product.thumbnail,
+      price: product.price,
+      status: product.status,
+      stock: product.stock,
+      category: product.category,
+    }));
+    res.render('productcatalog', {
+      products: productsData,
+      user: req.session.user,
+      pagination: response,
+    });
   } catch (error) {
-    console.log(error);
-    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
+    console.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/details/:cartId', async (req, res) => {
+router.get('/view', authMiddleware, async (req, res) => {
+  try {
+    const params = { ...req.query };
+    const response = await cartsService.getAll(params);
+    const cartsData = response.docs.map(cart => ({
+      id: cart._id,
+      userId: cart.userId,
+      nombre: cart.nombre,
+      direccion: cart.direccion,
+      email: cart.email,
+      items: cart.items, 
+      totalPrice: cart.totalPrice,
+    }));
+    res.render('carts', {
+      carts: cartsData,
+      user: req.session.user,
+      pagination: response,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
+router.get('/details/:cartId',authMiddleware, async (req, res) => {
   try {
       const cartId = req.params.cartId;
       const cartDetails = await cartsService.getCartDetails(cartId);
@@ -100,9 +67,8 @@ router.get('/details/:cartId', async (req, res) => {
       res.status(500).json({ status: 'error', error: error.message });
   }
 });
-router.post('/', async (req, res) => {
+router.post('/',authMiddleware, async (req, res) => {
   try {
-    console.log(req.body)
     const { userId, nombre, direccion, email, items, totalPrice } = req.body;
     if (!userId || !nombre || !direccion || !email || !items) {
       return res
@@ -126,7 +92,7 @@ router.post('/', async (req, res) => {
       .json({ status: 'error', error: error.message });
   }
 });
-router.delete('/carts/:id', async (req, res) => {
+router.delete('/carts/:id',authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     await cartsService.deleteCart(id);
@@ -140,7 +106,7 @@ router.delete('/carts/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.get('/:id', async (req, res) => {
+router.get('/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
@@ -159,7 +125,7 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.delete('/:cid/products/:pid', async (req, res) => {
+router.delete('/:cid/products/:pid', authMiddleware, async (req, res) => {
   try {
     const { cid, pid } = req.params;
     await cartsService.removeProductFromCart(cid, pid);
@@ -172,7 +138,7 @@ router.delete('/:cid/products/:pid', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:cid', async (req, res) => {
+router.put('/:cid',authMiddleware, async (req, res) => {
   try {
     const { cid } = req.params;
     const updatedCartData = req.body;
@@ -186,7 +152,7 @@ router.put('/:cid', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:cid/products/:pid', async (req, res) => {
+router.put('/:cid/products/:pid', authMiddleware, async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const { quantity } = req.body;

@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const enlaceCarrito = document.getElementById('micarrito');
     enlaceCarrito.classList.remove('d-none');
     enlaceCarrito.style.display = 'inline-block'; 
-
+    
     const verDetalle = document.getElementById('micarrito');
     const botonesComprar = document.querySelectorAll('.btn-comprar');
     contadorCarrito = document.getElementById('contadorCarrito');
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('btnAgregarMas').addEventListener('click', minimizarModal);
     
     botonesComprar.forEach(boton => {
-        boton.addEventListener('click', async function() { 
+        boton.addEventListener('click', async function() {
             const productId = this.querySelector('.bi').getAttribute('data-id');
             const existeEnCarrito = carrito.some(item => item.id === productId);
             
@@ -69,8 +69,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
-
     verDetalle.addEventListener('click', function() {
         if (carrito.length === 0) {
             Swal.fire({
@@ -97,7 +95,6 @@ async function obtenerDetallesProductoDesdeAPI(id) {
         .then((response) => response.json())
         .then((data) => data)
         .catch((error) => {
-            console.log(error);
             return null;
         });
 }

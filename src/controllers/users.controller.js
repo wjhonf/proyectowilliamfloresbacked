@@ -27,15 +27,14 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    const { firstName, lastName, email, password } = req.body
+    const { first_name, last_name, email, password } = req.body
 
     const newUserInfo = {
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       password,
     }
-
     const newUser = await usersService.insertOne(newUserInfo)
 
     res

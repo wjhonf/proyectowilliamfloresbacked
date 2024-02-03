@@ -4,9 +4,10 @@ const ProductDAOArray = require('../DAO/arrays/cart-dao.arrays')
 const Product = new ProductDAOMongo()
 const getAll = async (params) => {
   try {
-    return await Product.tomaTodo(params);
+    const response = await Product.tomaTodo(params);
+    return response;
   } catch (error) {
-    throw error
+    throw error;
   }
 }
 

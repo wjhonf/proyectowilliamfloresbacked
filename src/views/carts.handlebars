@@ -28,6 +28,7 @@
             <div class="d-flex justify-content-end mb-3">
                 <button type="button" id="searchButton" class="btn btn-outline-info">Buscar</button>
             </div>
+
       </div>
     </div>
     <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -41,8 +42,8 @@
                               Dirección: {{this.direccion}}<br>
                               Total: {{this.totalPrice}}<br>
                             </p>
-                            <button type="button" class="btn btn-warning btn-sm btn-ver"> <i class="bi bi-search" data-id="{{this._id}}" id="detalle"></i>Ver Detalle</button>
-                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{this._id}}" onclick="setCartIdToDelete(this.getAttribute('data-id'))">
+                            <button type="button" class="btn btn-warning btn-sm btn-ver"> <i class="bi bi-search" data-id="{{id}}" id="detalle"></i>Ver Detalle</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="{{id}}" onclick="setCartIdToDelete(this.getAttribute('data-id'))">
                           <i class="bi bi-trash"></i>
                         </button>
                           </div>
@@ -50,38 +51,39 @@
                   </div>
               {{/each}} 
           </div>
-            <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                      {{#if hasPrevPage}}
-                        <li class="page-item">
-                          <a class="page-link" href="{{prevLink}}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo; Atras</span>
-                          </a>
-                        </li>
-                      {{else}}
-                        <li class="page-item disabled">
-                          <span class="page-link">&laquo; Atras</span>
-                        </li>
-                      {{/if}}
-                      {{#each pages}}
-                        <li class="page-item{{#if this.isCurrent}} active{{/if}}">
-                          <a class="page-link" href="{{this.url}}">{{this.number}}</a>
-                        </li>
-                      {{/each}}
-                      {{#if hasNextPage}}
-                        <li class="page-item">
-                          <a class="page-link" href="{{nextLink}}" aria-label="Next">
-                            <span aria-hidden="true">Siguiente &raquo;</span>
-                          </a>
-                        </li>
-                      {{else}}
-                        <li class="page-item disabled">
-                          <span class="page-link">Siguiente &raquo;</span>
-                        </li>
-                      {{/if}}
-                    </ul>
-                </nav>
-            </div>
+           <nav aria-label="Pagination">
+  <ul class="pagination justify-content-center">
+
+    {{#if pagination.hasPrevPage}}
+      <li class="page-item">
+        <a class="page-link" href="/listcarts/view?page={{pagination.prevPage}}" aria-label="Anterior">
+          Anterior
+        </a>
+      </li>
+    {{else}}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">Anterior</span>
+      </li>
+    {{/if}}
+
+    <li class="page-item disabled">
+      <span class="page-link">{{pagination.page}}</span>
+    </li>
+
+    {{#if pagination.hasNextPage}}
+      <li class="page-item">
+        <a class="page-link" href="/listcarts/view?page={{pagination.nextPage}}" aria-label="Siguiente">
+          Siguiente
+        </a>
+      </li>
+    {{else}}
+      <li class="page-item disabled">
+        <span class="page-link" aria-hidden="true">Siguiente</span>
+      </li>
+    {{/if}}
+
+  </ul>
+</nav>
 <div class="modal fade" id="cartDetailsModal" tabindex="-1" aria-labelledby="cartDetailsModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">

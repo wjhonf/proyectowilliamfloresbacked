@@ -1,51 +1,48 @@
-/*const socket = io();
-function submitAddProductFormViaSocket() {
-  const title = document.querySelector('[name="title"]').value;
-  const description = document.querySelector('[name="description"]').value;
-  const code = document.querySelector('[name="code"]').value;
-  const price = document.querySelector('[name="price"]').value;
-  const status = document.querySelector('[name="status"]').value;
-  const stock = document.querySelector('[name="stock"]').value;
-  const category = document.querySelector('[name="category"]').value;
-  const thumbnail = document.querySelector('[name="thumbnail"]').value;
-  const productData = {
-    title,
-    description,
-    code,
-    price,
-    status,
-    stock,
-    category,
-    thumbnail,
+document.getElementById("guardarequipo").addEventListener("click", function(event) {
+  event.preventDefault(); 
+  const formData = {
+    title: document.getElementById("title").value,
+    code: document.getElementById("code").value,
+    price: document.getElementById("price").value,
+    stock: document.getElementById("stock").value,
+    category: document.getElementById("category").value,
+    thumbnail: document.getElementById("thumbnail").value,
+    description: document.getElementById("description").value
   };
-  socket.emit('addProduct', productData);
-}products
-socket.on('productAdded', response  => {
-  console.log('Nuevo producto agregado');
-  renderProduct(response.product);
+  fetch("/products", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === "success") {
+      Swal.fire({
+        icon: "success",
+        title: "Equipo registrado exitosamente"
+      }).then(() => {
+        window.location.href = "/products"; 
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Error al registrar el equipo",
+        text: data.error || "Hubo un problema al registrar el equipo"
+      });
+    }
+  })
+  .catch(error => {
+    console.error("Error:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Error al enviar la solicitud",
+      text: "Hubo un problema al enviar la solicitud."
+    });
+  });
 });
-function renderProduct(product) {
-  const productList = document.querySelector('#productList');
-  const productElement = document.createElement('div');
-  productElement.classList.add('col');
-  productElement.innerHTML = `
-    <div class="card">
-    <img src="${product.thumbnail}" alt="${product.title}" style="width: 10%; height: auto;">
-    <div class="card-body">
-    <h5 class="card-title">${product.title} - (${product.category})</h5>
-    <p class="card-text">
-    Código: ${product.code}<br>
-    Descripción: ${product.description}<br>
-    Precio: $${product.price}<br>
-    Estado: ${product.status ? 'Disponible' : 'Agotado'}<br>
-    Stock: ${product.stock} unidades<br>
-    </p>
-    </div>
-    </div>
-  `;
-  productList.appendChild(productElement);
-}
-*/
+
 document.getElementById('searchButton').addEventListener('click', function() {
   const searchInput = document.getElementById('search').value;
   const categorySelect = document.getElementById('categorySelect').value;
@@ -70,7 +67,7 @@ method: 'DELETE'
 $('#deleteModal').modal('hide');
 Swal.fire({
 toast: true,
-icon: 'danger',
+icon: 'error',
 title: 'Equipo Elimiando',
 animation: false,
 position: 'top-end',
@@ -90,7 +87,6 @@ function loadProductData(productId) {
     success: function (response) {
       if (response.status === 'success') {
         const product = response.payload;
-         console.log(product)
         $('#editModal').on('hidden.bs.modal', function () {
           $('#id').val('');
           $('#editTitle').val('');
@@ -147,7 +143,6 @@ function saveProductChanges() {
     thumbnail: $('#editThumbnail').val(),
     description: $('#editDescription').val(),
   };
-
   $.ajax({
     url: `/products/${productId}`,
     type: 'PUT',

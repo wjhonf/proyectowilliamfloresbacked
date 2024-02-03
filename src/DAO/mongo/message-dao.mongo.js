@@ -6,7 +6,7 @@ class MessageDAO {
   }
 
   async creamosUno(newMessageInfo) {
-    console.log('Creado desde el DAO')
+    //console.log('Creado desde el DAO')
     return await Message.create(newMessageInfo)
   }
 }

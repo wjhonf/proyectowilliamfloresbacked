@@ -134,6 +134,7 @@ function renderizarDetallesDelCarrito() {
 }
 document.getElementById('checkoutForm').addEventListener('submit', function(event) {
     event.preventDefault();
+    const iduser = document.getElementById("iduser").value;
     if (!this.nombre.value || !this.direccion.value || !this.email.value) {
         Swal.fire({
                 title: 'Campos Vacios',
@@ -162,7 +163,7 @@ document.getElementById('checkoutForm').addEventListener('submit', function(even
         quantity: item.cantidad
     }));
     const dataToSend = {
-        userId: '34', 
+        userId: iduser, 
         nombre: this.nombre.value,
         direccion: this.direccion.value,
         email: this.email.value,

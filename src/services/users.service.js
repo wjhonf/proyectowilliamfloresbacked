@@ -5,7 +5,7 @@ const User = new UserDAOMongo()
 const getAll = async () => {
   try {
     const users = await User.tomaTodo()
-    console.log('Obtenemos todos desde el service')
+    //console.log('Obtenemos todos desde el service')
     return users
   } catch (error) {
     throw error
