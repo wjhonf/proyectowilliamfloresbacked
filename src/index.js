@@ -12,6 +12,8 @@ const MongoStore = require('connect-mongo');
 const mongoConnect= require('./db');
 const path = require('path');
 const fileStorage = fileStore(session)
+const initializePassport = require('./configs/passport.config')
+const passport = require('passport')
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
@@ -34,6 +36,10 @@ app.use(
   })
 )
 mongoConnect()
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 const httpServer = app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });

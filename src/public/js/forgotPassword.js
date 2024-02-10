@@ -1,4 +1,4 @@
-const form = document.getElementById('loginForm');
+const form = document.getElementById('forgotPassword');
 form.addEventListener('submit', e => {
   e.preventDefault();
   const data = new FormData(form);
@@ -7,7 +7,7 @@ form.addEventListener('submit', e => {
     obj[key] = value;
   });
   const fetchParams = {
-    url: '/auth/login', 
+    url: '/auth/forgot-password',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -20,17 +20,17 @@ form.addEventListener('submit', e => {
       if (data.status === 'Success') {
         Swal.fire({
           icon: 'success',
-          title: 'Inicio de sesión exitoso',
-          text: '¡Bienvenido/a a Compras en Línea!',
+          title: 'Contraseña Actualizada',
+          text: '¡Tu Contraseña ha sido actualizada!',
           confirmButtonColor: '#28a745',
         }).then(() => {
-          window.location.href = '/home';
+          window.location.href = '/login';
         });
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Inicio de sesión fallido',
-          text: data.message || 'Ocurrió un error desconocido.',
+          title: 'Intentar de nuevo',
+          text: data.message,
           confirmButtonColor: '#dc3545',
           confirmButtonText: 'Intentar de nuevo'
         });
@@ -40,7 +40,7 @@ form.addEventListener('submit', e => {
       Swal.fire({
         icon: 'error',
         title: 'Error',
-        text: 'Ocurrió un error al intentar iniciar sesión'
+        text: 'Ocurrió un error al intentar restablecer la contraseña'
       });
     });
 });

@@ -1,5 +1,8 @@
 const { Router } = require('express')
 const authMiddleware = require('../middleware/auth.middleware')
+const privateAccess = require('../middleware/private-access.middleware')
+const publicAccess = require('../middleware/public-acces.middleware')
+
 
 const router = Router()
 router.get('/login', (req, res) => {
@@ -21,7 +24,6 @@ router.get('/', (req, res) => {
 router.get('/signup', (req, res) => {
   res.render('signup', { layout: false });
 })
-
 router.get('/profile', authMiddleware, (req, res) => {
   const { user } = req.session
   res.render('profile', { user })
@@ -29,5 +31,9 @@ router.get('/profile', authMiddleware, (req, res) => {
 router.get('/home', authMiddleware, (req, res) => {
   const { user } = req.session;
   res.render('home', { user }); 
+});
+router.get('/forgotPassword', (req, res) => {
+
+  res.render('forgot-Password'); 
 });
 module.exports = router

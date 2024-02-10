@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'user',
   },
+  githubId: Number,
+  githubUsername: String,
+  gmailId: Number,
+  facebookId: Number,
 })
 
 const Users = mongoose.model(userCollection, userSchema)
