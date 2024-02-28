@@ -4,9 +4,11 @@ const Cart = require('../models/carts.model');
 const productsService = require('../services/products.service');
 const authMiddleware = require('../middleware/auth.middleware')
 const cartsService = require('../services/carts.service');
+const passportCall = require('../utils/passport-call.util')
+const authorization = require('../middleware/authorization.middleware')
 const router = Router();
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await productsService.getAll(params);
@@ -23,7 +25,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }));
     res.render('productcatalog', {
       products: productsData,
-      user: req.session.user,
+      user: req.user,
       pagination: response,
     });
   } catch (error) {
@@ -31,7 +33,7 @@ router.get('/', authMiddleware, async (req, res) => {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/view', authMiddleware, async (req, res) => {
+router.get('/view', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await cartsService.getAll(params);
@@ -46,7 +48,7 @@ router.get('/view', authMiddleware, async (req, res) => {
     }));
     res.render('carts', {
       carts: cartsData,
-      user: req.session.user,
+      user: req.user,
       pagination: response,
     });
   } catch (error) {
@@ -54,7 +56,7 @@ router.get('/view', authMiddleware, async (req, res) => {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/details/:cartId',authMiddleware, async (req, res) => {
+router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
       const cartId = req.params.cartId;
       const cartDetails = await cartsService.getCartDetails(cartId);
@@ -67,7 +69,7 @@ router.get('/details/:cartId',authMiddleware, async (req, res) => {
       res.status(500).json({ status: 'error', error: error.message });
   }
 });
-router.post('/',authMiddleware, async (req, res) => {
+router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { userId, nombre, direccion, email, items, totalPrice } = req.body;
     if (!userId || !nombre || !direccion || !email || !items) {
@@ -92,7 +94,7 @@ router.post('/',authMiddleware, async (req, res) => {
       .json({ status: 'error', error: error.message });
   }
 });
-router.delete('/carts/:id',authMiddleware, async (req, res) => {
+router.delete('/carts/:id',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
     await cartsService.deleteCart(id);
@@ -106,7 +108,7 @@ router.delete('/carts/:id',authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.get('/:id', authMiddleware, async (req, res) => {
+router.get('/:id',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
@@ -125,7 +127,7 @@ router.get('/:id', authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.delete('/:cid/products/:pid', authMiddleware, async (req, res) => {
+router.delete('/:cid/products/:pid', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { cid, pid } = req.params;
     await cartsService.removeProductFromCart(cid, pid);
@@ -138,7 +140,7 @@ router.delete('/:cid/products/:pid', authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:cid',authMiddleware, async (req, res) => {
+router.put('/:cid',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { cid } = req.params;
     const updatedCartData = req.body;
@@ -152,7 +154,7 @@ router.put('/:cid',authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:cid/products/:pid', authMiddleware, async (req, res) => {
+router.put('/:cid/products/:pid', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { cid, pid } = req.params;
     const { quantity } = req.body;

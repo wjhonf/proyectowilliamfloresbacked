@@ -3,9 +3,13 @@ const HTTP_RESPONSES = require('../constants/http-responses.contant')
 const User = require('../models/user.model')
 const usersService = require('../services/users.service')
 const { createHash } = require('../utils/crypt-password.util');
+const { generateToken } = require('../utils/jwt.util');
 const passport = require('passport')
+const passportCall = require('../utils/passport-call.util')
+const authorization = require('../middleware/authorization.middleware')
+
 const router = Router()
-router.get('/', async (req, res) => {
+router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const users = await usersService.getAll()
     res.json({ status: 'success', payload: users })
@@ -25,24 +29,26 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error })
   }
 })
-
 router.post(
   '/',
   passport.authenticate('register', {
+    session: false, 
     failureRedirect: '/users/fail-register',
   }),
   async (req, res) => {
     try {
-      res
-        .status(HTTP_RESPONSES.CREATED)
-        .json({ status: 'Success', message: 'User has been register' })
+      const user= req.user
+      const token = generateToken({ id: user._id, first_name: user.first_name,last_name: user.last_name, email: user.email, role: user.role });
+      res.cookie('authToken', token, {
+        maxAge: 30000,
+        httpOnly: true,
+      }).json({ status: 'Success', payload: 'Logged in' });
     } catch (error) {
-      console.log(error)
-      res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
+      console.log(error);
+      res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
     }
   }
-)
-
+);
 router.get('/fail-register', (req, res) => {
   console.log('Falló registro')
   res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', error: 'Bad request' })
@@ -78,7 +84,6 @@ router.put('/:uid', async (req, res) => {
       .json({ status: 'error', error })
   }
 })
-
 router.delete('/:uid', async (req, res) => {
   try {
     res

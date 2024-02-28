@@ -9,7 +9,8 @@ const paycheckoutcontroller = require('../controllers/paycheckout.controller');
 const router = (app, io) => {
   app.use('/', viewsTemplateController);
   app.use('/users', userscontroller);
-  app.use('/auth', authControlller)
+  app.use('/auth', authControlller);
+  app.use('/auth/auth', authControlller);
   app.use('/listcarts/auth', authControlller)
   app.use('/products', productscontrollers);
   app.use('/messages', messagecontroller);

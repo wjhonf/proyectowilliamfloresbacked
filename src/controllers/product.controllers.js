@@ -3,10 +3,12 @@ const HTTP_RESPONSES = require('../constants/http-responses.contant');
 const Product = require('../models/product.model');
 const productsService = require('../services/products.service');
 const authMiddleware = require('../middleware/auth.middleware')
+const passportCall = require('../utils/passport-call.util')
+const authorization = require('../middleware/authorization.middleware')
 const fs = require('fs');
 const router = Router();
 
-router.get('/', authMiddleware, async (req, res) => {
+router.get('/',  passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await productsService.getAll(params);
@@ -23,7 +25,7 @@ router.get('/', authMiddleware, async (req, res) => {
     }));
     res.render('products', {
       products: productsData,
-      user: req.session.user,
+      user: req.user,
       pagination: response,
     });
   } catch (error) {
@@ -32,7 +34,7 @@ router.get('/', authMiddleware, async (req, res) => {
   }
 });
 
-router.get('/:id',authMiddleware, async (req, res) => {
+router.get('/:id', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
@@ -51,7 +53,7 @@ router.get('/:id',authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.get('/details/:cartId',authMiddleware, async (req, res) => {
+router.get('/details/:cartId', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
       const cartId = req.params.cartId;
       const cartDetails = await cartsService.getCartDetails(cartId);
@@ -68,7 +70,7 @@ router.get('/details/:cartId',authMiddleware, async (req, res) => {
   }
 });
 
-router.post('/',authMiddleware, async (req, res) => {
+router.post('/', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { title, description, code, price, stock, category, thumbnail } = req.body;
 
@@ -101,7 +103,7 @@ router.post('/',authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.put('/:id',authMiddleware, async (req, res) => {
+router.put('/:id', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, code, price, stock, category, thumbnail } = req.body;
@@ -133,7 +135,7 @@ router.put('/:id',authMiddleware, async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-router.delete('/:id',authMiddleware,  async (req, res) => {
+router.delete('/:id', passportCall('jwt'),authorization('user'),  async (req, res) => {
   try {
     const { id } = req.params;
     await productsService.deleteProductById(id);

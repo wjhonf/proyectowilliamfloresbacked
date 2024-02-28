@@ -13,6 +13,7 @@ const mongoConnect= require('./db');
 const path = require('path');
 const fileStorage = fileStore(session)
 const initializePassport = require('./configs/passport.config')
+
 const passport = require('passport')
 const app = express();
 app.use(express.json());
@@ -24,7 +25,7 @@ app.engine('handlebars', handlebars.engine());
 app.set('views', process.cwd() + '/src/views');
 app.set('view engine', 'handlebars');
 
-app.use(
+/*app.use(
   session({
     secret: 'Williamsecret',
     store: MongoStore.create({
@@ -34,11 +35,11 @@ app.use(
     resave: false,
     saveUninitialized: false,
   })
-)
+)*/
 mongoConnect()
 initializePassport()
 app.use(passport.initialize())
-app.use(passport.session())
+//app.use(passport.session())
 
 const httpServer = app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
