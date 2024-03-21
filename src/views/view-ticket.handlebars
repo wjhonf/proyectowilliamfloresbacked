@@ -1,0 +1,29 @@
+<div class="container mt-5">
+  <div class="card">
+    <div class="card-body">
+      <h6 class="card-title text-center">Ticket de Compra</h6>
+      <div class="form-group">
+        <label>Código de Ticket:</label>
+        <p class="form-control">{{ ticket.code }}</p>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha y Hora de Compra:</label>
+        <p class="form-control">{{ ticket.purchase_datetime }}</p>
+      </div>
+
+      <div class="form-group">
+        <label>Total de la Compra:</label>
+        <p class="form-control">{{ ticket.amount }}</p>
+      </div>
+
+      <div class="form-group">
+        <label>Email:</label>
+        <p class="form-control">{{ ticket.purchaser }}</p>
+      </div>
+      <div class="text-center">
+         <a  class="btn btn-success" href="/productcatalog">Seguir Comprando</a>
+      </div>
+    </div>
+  </div>
+</div>

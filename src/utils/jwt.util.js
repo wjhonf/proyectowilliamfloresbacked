@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const secret = 'mySecret'
 
 const generateToken = user => {
-  return jwt.sign(user, secret, { expiresIn: '1h' })
+  return jwt.sign(user, secret, { expiresIn: '24h' })
 }
 const authToken = (req, res, next) => {
   const authHeader = req.headers.authorization

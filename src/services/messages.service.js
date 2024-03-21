@@ -1,5 +1,5 @@
 const MessageDAOMongo = require('../DAO/mongo/message-dao.mongo')
-const MessageDAOArray = require('../DAO/arrays/message.dao.arrays')
+const MessageDAOArray = require('../DAO/memory/user-memory.dao')
 
 const Message = new MessageDAOMongo()
 const getAll = async () => {

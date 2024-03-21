@@ -1,14 +1,15 @@
 const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
-const Product = require('../models/product.model');
+const Product = require('../DAO/mongo/models/product.model');
 const productsService = require('../services/products.service');
 const authMiddleware = require('../middleware/auth.middleware')
 const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
+const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
 const fs = require('fs');
 const router = Router();
 
-router.get('/',  passportCall('jwt'),authorization('user'), async (req, res) => {
+router.get('/',  passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await productsService.getAll(params);
@@ -70,7 +71,7 @@ router.get('/details/:cartId', passportCall('jwt'),authorization('user'), async 
   }
 });
 
-router.post('/', passportCall('jwt'),authorization('user'), async (req, res) => {
+router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
     const { title, description, code, price, stock, category, thumbnail } = req.body;
 
@@ -103,7 +104,7 @@ router.post('/', passportCall('jwt'),authorization('user'), async (req, res) => 
       .json({ status: 'error', error });
   }
 });
-router.put('/:id', passportCall('jwt'),authorization('user'), async (req, res) => {
+router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, code, price, stock, category, thumbnail } = req.body;
@@ -135,7 +136,7 @@ router.put('/:id', passportCall('jwt'),authorization('user'), async (req, res) =
       .json({ status: 'error', error });
   }
 });
-router.delete('/:id', passportCall('jwt'),authorization('user'),  async (req, res) => {
+router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {
   try {
     const { id } = req.params;
     await productsService.deleteProductById(id);

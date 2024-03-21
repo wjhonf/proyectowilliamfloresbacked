@@ -1,4 +1,16 @@
 <div class="container mt-5">
+    {{#if error}}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" id="errorAlert">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div>
+                <strong>Error:</strong> {{error}}
+            </div>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{{/if}}
+
     <h6 class="text-center mb-4">Nuestros Productos</h6>
 
     <div class="row">
@@ -21,7 +33,6 @@
                 </div>
             </div>
         </div>
-
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
                 <img src="../img/equipo6.jpg" class="card-img-top" alt="Accesorios Esenciales">
@@ -33,3 +44,12 @@
         </div>
     </div>
 </div>
+<script>
+    const errorAlert = document.getElementById('errorAlert');
+    setTimeout(() => {
+        errorAlert.classList.add('fade');
+        setTimeout(() => {
+            errorAlert.remove();
+        }, 1000);
+    }, 3000);
+</script>

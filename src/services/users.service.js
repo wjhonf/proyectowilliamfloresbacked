@@ -1,31 +1,29 @@
-const UserDAOMongo = require('../DAO/mongo/user-dao.mongo')
-const UserDAOArray = require('../DAO/arrays/user-dao.arrays')
+const NewUserDto = require('../DTOs/new-user.dto');
+const Users = require('../repository');
+const UsersRepository = require('../repository');
+const MailAdapter = require('../adapters/mail.adapter') 
+const { sms } = require('../configs/app.config')
+const client = require('../utils/twilio.util')
+const sendMail= new MailAdapter()
+const getUsers = async () => {
+  console.log('Obteniendo usuarios desde el service');
+  return await Users.get();
+};
 
-const User = new UserDAOMongo()
-const getAll = async () => {
-  try {
-    const users = await User.tomaTodo()
-    //console.log('Obtenemos todos desde el service')
-    return users
-  } catch (error) {
-    throw error
-  }
-}
+const createUser = async newUser => {
+  console.log('Creando usuario desde el service');
+  const newUserInfo = new NewUserDto(newUser); 
+  sendMail.sendMessage
+  return await Users.create(newUserInfo);
+};
 
-const insertOne = async newUserInfo => {
-  try {
-    newUserInfo.createdAt = new Date()
-    newUserInfo.updatedAt = new Date()
-
-    const newUser = await User.creamosUno(newUserInfo)
-
-    return newUser
-  } catch (error) {
-    throw error
-  }
-}
+const findOne = async query => {
+  console.log('Buscando usuario desde el service');
+  return await UsersRepository.findOne(query); 
+};
 
 module.exports = {
-  getAll,
-  insertOne,
-}
+  getUsers,
+  createUser,
+  findOne,
+};

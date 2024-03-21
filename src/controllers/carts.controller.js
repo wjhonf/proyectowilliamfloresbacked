@@ -1,17 +1,21 @@
 const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
-const Cart = require('../models/carts.model');
+const Cart = require('../DAO/mongo/models/carts.model');
 const productsService = require('../services/products.service');
 const authMiddleware = require('../middleware/auth.middleware')
 const cartsService = require('../services/carts.service');
+const ticketService = require('../services/ticket.service');
 const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
+const { generateTicketCode } = require('../utils/ticketUtils');
+const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
 const router = Router();
 
-router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
+router.get('/', passportCall('jwt'),authorization('user'),isUser, async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await productsService.getAll(params);
+    
     const productsData = response.docs.map(product => ({
       id:product._id,
       title: product.title,
@@ -33,7 +37,7 @@ router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/view', passportCall('jwt'),authorization('user'), async (req, res) => {
+router.get('/view', passportCall('jwt'),authorization('user'), isAdmin, async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await cartsService.getAll(params);
@@ -71,6 +75,7 @@ router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (
 });
 router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
+    console.log(req.body)
     const { userId, nombre, direccion, email, items, totalPrice } = req.body;
     if (!userId || !nombre || !direccion || !email || !items) {
       return res
@@ -83,10 +88,17 @@ router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
         .json({ status: 'error', error: 'Datos de productos inválidos' });
     }
     const newCartData = { userId, nombre, direccion, email, items, totalPrice};
+    console.log(newCartData)
     const newCart = await cartsService.insertOne(newCartData);
+    const message = await cartsService.processPurchase(newCart._id, items);
+    const ticketCode = generateTicketCode();
+    console.log(ticketCode);
+    const ticketnew = { code: ticketCode, amount: totalPrice, purchaser: email };
+    console.log("datos",ticketnew);
+    const ticket = await ticketService.generateTicket(ticketnew);
     res
       .status(HTTP_RESPONSES.CREATED)
-      .json({ status: 'success', payload: newCart });
+      .json({ status: 'success', payload: newCart, message, ticketCode: ticketnew.code});
   } catch (error) {
     console.log(error);
     res
@@ -168,4 +180,36 @@ router.put('/:cid/products/:pid', passportCall('jwt'),authorization('user'), asy
       .json({ status: 'error', error });
   }
 }); 
+router.post('/:cid/purchase', passportCall('jwt'), authorization('user'), async (req, res) => {
+  try {
+    const cartId = req.params.cid;
+    const { failedProducts, ticket } = await cartsService.processPurchase(cartId);
+    if (failedProducts.length > 0) {
+      await cartsService.updateCartAfterPurchase(cartId, failedProducts);
+      res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Compra completada con productos no procesados', failedProducts, ticket });
+    } else {
+      const newTicket = await ticketService.generateTicket(ticket);
+      res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Compra completada exitosamente', ticket: newTicket });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
+  }
+});
+router.get('/consultastock/:pid', passportCall('jwt'), authorization('user'), async (req, res) => {
+  try {
+    const { pid } = req.params; 
+    const { quantity } = req.query;
+    const result = await cartsService.checkProductStockInCart(pid, quantity);
+    if (result.success) {
+      res.status(HTTP_RESPONSES.OK).json({ status: 'success', productInCart: result.productInCart });
+    } else {
+      res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error',  productInCart: result.productInCart });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
+  }
+});
+
 module.exports = router;

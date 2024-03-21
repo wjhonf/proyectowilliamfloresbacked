@@ -1,4 +1,4 @@
-const Product = require('../../models/product.model')
+const Product = require('../mongo/models/product.model')
 class ProductDAO {
   async tomaTodo({ limit = 10, page = 1, sort = '', category = '', status = '', search = '' }) {
     const query = {};
@@ -11,6 +11,7 @@ class ProductDAO {
     if (search) {
       query.title = { $regex: search, $options: 'i' };
     }
+    query.stock = { $gte: 1 };
     let sortOrder = sort === 'asc' ? { price: 1 } : { price: -1 };
   
     const options = {
@@ -26,7 +27,6 @@ class ProductDAO {
     }
   }
   async creamosUno(newProductInfo) {
-    //console.log('Creado desde el DAO')
     return await Product.create(newProductInfo)
   }
   async findById(productId) {
@@ -34,7 +34,6 @@ class ProductDAO {
       const product = await Product.findById(productId).lean().exec();
       return product;
     } catch (error) {
-      //console.error(`Error al buscar el producto por ID: ${productId}`, error);
       throw error;
     }
   }
@@ -48,12 +47,10 @@ class ProductDAO {
   }
   
   async deleteProduct(idProduct) {
-    //console.log('Eliminado desde el DAO');
     console.log(idProduct)
     return await Product.deleteOne({ _id: idProduct });
  }
   async insertMany(products) {
-    //console.log('Insertando múltiples productos desde el DAO');
     return await Product.insertMany(products);
   }
   

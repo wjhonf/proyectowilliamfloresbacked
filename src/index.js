@@ -1,6 +1,6 @@
 const express = require('express');
 const handlebars = require('express-handlebars');
-const { port } = require('./configs/server.config');
+const { port } = require('./configs/app.config');
 const router = require('./router');
 const { Server } = require('socket.io');
 const axios = require('axios');

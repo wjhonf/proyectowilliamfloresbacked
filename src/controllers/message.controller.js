@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
-const Message = require('../models/message.model');
+const Message = require('../DAO/mongo/models/message.model');
 const messagesService = require('../services/messages.service');
 
 const router = Router();

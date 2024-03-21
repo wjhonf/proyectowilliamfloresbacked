@@ -143,13 +143,13 @@ async function mostrarDetallesCarrito() {
     contenidoModal.innerHTML = contenidoCarrito;
     modalDetalleCarrito.show();
 }
-function actualizarCantidad(productId, nuevaCantidad) {
+/*function actualizarCantidad(productId, nuevaCantidad) {
     const productoExistente = carrito.find((item) => item.id === productId);
     if (productoExistente) {
         productoExistente.cantidad = parseInt(nuevaCantidad) || 1;
         mostrarDetallesCarrito();
     }
-}
+}*/
 function vaciarCarritoYCerrarModal() {
     carrito = []; 
     actualizarContadorCarrito(); 
@@ -183,4 +183,66 @@ function obtenerDatosDelCarrito() {
         };
     });
 }
+function actualizarCantidad(productId, nuevaCantidad) {
+    const productoExistente = carrito.find((item) => item.id === productId);
+    if (productoExistente) {
+        const cantidad = parseInt(nuevaCantidad) || 1;
+        if (cantidad > 0) {
+            checkStockAndSetQuantity(productId, cantidad);
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'La cantidad ingresada no es válida',
+                icon: 'error',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-danger'
+                }
+            });
+        }
+    }
+}
 
+async function checkStockAndSetQuantity(productId, cantidad) {
+    try {
+        const response = await fetch(`/consultastock/${productId}?quantity=${cantidad}`);
+        
+        if (!response.ok) {
+            throw new Error('Error al verificar el stock del producto');
+        }
+        const data = await response.json();
+        console.log(data.productInCart);
+
+        console.log(data.success);
+
+        if (data.productInCart== true) {
+
+            const productoExistente = carrito.find((item) => item.id === productId);
+            if (productoExistente) {
+                productoExistente.cantidad = cantidad;
+                mostrarDetallesCarrito();
+            }
+        } else {
+            Swal.fire({
+                title: 'Sistema de Compras',
+                text: data.productInCart,
+                icon: 'warning',
+                confirmButtonText: 'Ok',
+                customClass: {
+                    confirmButton: 'btn btn-warning'
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Error al verificar el stock:', error.message);
+        Swal.fire({
+            title: 'Error',
+            text: 'Error al verificar el stock del producto',
+            icon: 'error',
+            confirmButtonText: 'Ok',
+            customClass: {
+                confirmButton: 'btn btn-danger'
+            }
+        });
+    }
+}

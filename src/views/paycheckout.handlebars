@@ -22,7 +22,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" value="{{user.email}}" readonly>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -188,7 +188,8 @@ document.getElementById('checkoutForm').addEventListener('submit', function(even
                 customClass: {
                     confirmButton: 'btn btn-warning'
     }})
-        window.location.href = '/productcatalog';
+        let codigo= data.ticketCode
+        window.location.href = `/ticket/${codigo}`;
     })
     .catch((error) => {
         Swal.fire({

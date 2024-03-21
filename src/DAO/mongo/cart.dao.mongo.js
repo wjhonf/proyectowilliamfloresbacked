@@ -1,4 +1,5 @@
-const Carts = require('../../models/carts.model');
+const Carts = require('../mongo/models/carts.model');
+const ProductDAO=require('../mongo/models/product.model')
 class CartDAO {
   async tomaTodo({ limit = 10, page = 1, fromDate, toDate } = {}) {
     let query = {};
@@ -85,6 +86,24 @@ class CartDAO {
       throw error;
     }
   }
+  async checkProductStock(productId, desiredQuantity) {
+    try {
+      const product = await ProductDAO.findById(productId);
+      
+      if (!product) {
+        return 'Producto no encontrado';
+      }
+      
+      if (desiredQuantity > product.stock) {
+        return `No hay suficiente stock disponible. Stock actual: ${product.stock}`;
+      }
+      
+      return true;
+    } catch (error) {
+      return error.message; // Devolver el mensaje de error si ocurre alguno
+    }
+  }
+  
 
 }
 

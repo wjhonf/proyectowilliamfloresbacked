@@ -3,6 +3,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 const {authToken}= require('../utils/jwt.util')
 const passport = require('passport')
 const passportCall = require('../utils/passport-call.util')
+const User = require('../DAO/mongo/models/user.model');
 const authorization = require('../middleware/authorization.middleware')
 const router = Router()
 router.get('/login', (req, res) => {
@@ -23,24 +24,23 @@ router.get('/',  passportCall('jwt'),authorization('user'), (req, res) => {
   }
 });
 
-router.get('/home', passportCall('jwt'),authorization('user'), (req, res) => {
-  if (req.user) {
-    const user= req.user
-    res.render('home', {user});
+router.get('/home', passportCall('jwt'), authorization('user'), (req, res) => {
+  const user = req.user;
+  const error = req.query.error; 
+
+  if (user) {
+    res.render('home', { user, error });
   } else {
-    const user= req.user
-    res.render('home', {user} );
+    res.render('home', { error });
   }
 });
-
 router.get('/signup', (req, res) => {
   res.render('signup', { layout: false });
 })
 
-router.get('/profile', passportCall('jwt'), authorization('user'), (req, res) => {
-  const user= req.user
-  console.log(user)
-  res.render('profile', { user })
+router.get('/profile', passportCall('jwt'), authorization('user'), async (req, res) => {
+  const user = req.user;
+  res.render('profile', {user})
 })
 router.get('/forgotPassword', (req, res) => {
 

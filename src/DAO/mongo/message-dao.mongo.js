@@ -1,4 +1,4 @@
-const Message = require('../../models/message.model')
+const Message = require('../mongo/models/message.model')
 
 class MessageDAO {
   async tomaTodo() {
@@ -6,7 +6,6 @@ class MessageDAO {
   }
 
   async creamosUno(newMessageInfo) {
-    //console.log('Creado desde el DAO')
     return await Message.create(newMessageInfo)
   }
 }

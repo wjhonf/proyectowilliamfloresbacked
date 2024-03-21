@@ -1,17 +1,19 @@
 const { Router } = require('express')
 const HTTP_RESPONSES = require('../constants/http-responses.contant')
-const User = require('../models/user.model')
+const User = require('../DAO/mongo/models/user.model')
 const usersService = require('../services/users.service')
+const userCurrent = require('../services/user.service.current');
 const { createHash } = require('../utils/crypt-password.util');
 const { generateToken } = require('../utils/jwt.util');
 const passport = require('passport')
 const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
-
+const { email } = require('../configs/app.config')
+const transport = require('../utils/nademailer.util')
 const router = Router()
 router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
-    const users = await usersService.getAll()
+    const users = await usersService.getUsers()
     res.json({ status: 'success', payload: users })
   } catch (error) {
     res
@@ -19,7 +21,6 @@ router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
       .json({ status: 'error', error })
   }
 })
-
 router.get('/:id', async (req, res) => {
   try {
     res.json({ status: 'success', payload: user })
@@ -39,6 +40,7 @@ router.post(
     try {
       const user= req.user
       const token = generateToken({ id: user._id, first_name: user.first_name,last_name: user.last_name, email: user.email, role: user.role });
+    
       res.cookie('authToken', token, {
         maxAge: 30000,
         httpOnly: true,
@@ -53,7 +55,6 @@ router.get('/fail-register', (req, res) => {
   console.log('Falló registro')
   res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', error: 'Bad request' })
 })
-
 router.put('/:uid', async (req, res) => {
   try {
     const { uid } = req.params
@@ -95,6 +96,21 @@ router.delete('/:uid', async (req, res) => {
       .json({ status: 'error', error })
   }
 })
+router.get('/current', async (req, res) => {
+  try {
+    const userId = req.userId; 
+    const currentUser = await userCurrent.getCurrentUser(userId);
+    const userDTO = {
+      id: currentUser.id,
+      username: currentUser.username,
+      email: currentUser.email
+    };
+
+    res.json(userDTO);
+  } catch (error) {
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
 /*router.post('/', async (req, res) => {
   try {
     const { first_name, last_name, email, password } = req.body

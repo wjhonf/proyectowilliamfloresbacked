@@ -2,10 +2,20 @@ const passport = require('passport')
 const jwt = require('passport-jwt')
 const cookieExtractor = require('../utils/cookie-extractor.util')
 const local = require('passport-local')
-const Users = require('../models/user.model')
+const Users = require('../DAO/mongo/models/user.model')
 const { createHash, useValidPassword } = require('../utils/crypt-password.util')
 const GithubStrategy = require('passport-github2')
-const { ghClientSecret, ghClientId } = require('./gh.config')
+const { ghClientSecret, ghClientId } = require('./app.config')
+const NewUserDto=require('../DTOs/new-user.dto')
+/*const UsersMemoryDao= require ('../DAO/memory/user-memory.dao')
+const UsersMongoDao = require('../DAO/mongo/user-dao.mongo')
+//const Users= new  UsersMemoryDao()
+const Users= new UsersMongoDao()*/
+
+//const UsersFactory= require('../factory/users.factory')
+//const Users= new UsersFactory()
+//const Users= require('../repository')
+const usersService= require('../services/users.service')
 const JWTStrategy = jwt.Strategy
 const LocalStrategy2 = local.Strategy
 const initializePassport = () => {
@@ -31,21 +41,13 @@ const initializePassport = () => {
       { passReqToCallback: true, usernameField: 'email' },
       async (req, username, password, done) => {
         try {
-          const { first_name, last_name, email } = req.body
-          const user = await Users.findOne({ email: username })
+          const user = await usersService.findOne({ email: username })
           if (user) {
             console.log('Usuario ya exite')
             return done(null, false)
           }
-
-          const newUserInfo = {
-            first_name,
-            last_name,
-            email,
-            password: createHash(password),
-          }
-
-          const newUser = await Users.create(newUserInfo)
+          await usersService.createUser(req.body)
+          const newUser = await usersService.findOne({ email: req.body.email });
           return done(null, newUser)
         } catch (error) {
           return done(error)
@@ -63,10 +65,8 @@ const initializePassport = () => {
       },
       async (accessToken, RefreshToken, profile, done) => {
         try {
-      
 
-        const { id, login, name, email } = profile._json
-
+          const { id, login, name, email } = profile._json
           const user = await Users.findOne({ email: email })
           if (!user) {
             const newUserInfo = {
@@ -75,7 +75,6 @@ const initializePassport = () => {
               githubId: id,
               githubUsername: login,
             }
-
             const newUser = await Users.create(newUserInfo)
             return done(null, newUser)
 

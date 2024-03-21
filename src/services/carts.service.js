@@ -98,6 +98,46 @@ const deleteCart = async (cartId) => {
     throw error;
   }
 };
+async function processPurchase(cartId) {
+  try {
+    const cart = await Cart.tomaUno(cartId);
+    if (!cart) {
+      throw new Error('Carrito no encontrado');
+    }
+    for (const item of cart.items) {
+      const product = await ProductDAO.findById(item.productId);
+      if (!product) {
+        throw new Error(`Producto ${item.productId} no encontrado`);
+      }
+      if (product.stock < item.quantity) {
+        throw new Error(`El producto ${product.title} no tiene suficiente stock.`);
+      }
+    }
+    for (const item of cart.items) {
+      const product = await ProductDAO.findById(item.productId);
+      if (!product) {
+        throw new Error(`Producto ${item.productId} no encontrado`);
+      }
+      product.stock -= item.quantity;
+      await ProductDAO.updateById(product._id, { stock: product.stock });
+    }
+
+    return 'Compra completada exitosamente.';
+  } catch (error) {
+    throw error;
+  }
+}
+
+const checkProductStockInCart = async (productId, desiredQuantity) => {
+  try {
+    const productInCart = await Cart.checkProductStock(productId, desiredQuantity);
+    return { success: true, productInCart }; // Indica que la verificación del stock fue exitosa
+  } catch (error) {
+    console.error('Error en el servicio:', error);
+    return { success: false, error: error.message }; // Devuelve el mensaje de error
+  }
+};
+
 module.exports = {
   getAll,
   insertOne,
@@ -107,4 +147,6 @@ module.exports = {
   updateProductQuantity,
   removeAllProductsFromCart,
   deleteCart,
+  processPurchase,
+  checkProductStockInCart,
 };

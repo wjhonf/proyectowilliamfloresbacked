@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const Users = require('../models/user.model');
+const Users = require('../DAO/mongo/models/user.model');
 const passport = require('passport')
 const { useValidPassword, createHash } = require('../utils/crypt-password.util')
 const {generateToken} = require('../utils/jwt.util')
@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
     const token = generateToken({ id: user._id, first_name: user.first_name,last_name: user.last_name, email: user.email, role: user.role });
 
     res.cookie('authToken', token, {
-      maxAge: 30000,
+      maxAge: 300000,
       httpOnly: true,
     }).json({ status: 'Success', payload: 'Logged in' });
   } catch (error) {

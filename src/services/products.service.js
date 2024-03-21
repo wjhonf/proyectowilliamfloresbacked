@@ -1,5 +1,5 @@
 const ProductDAOMongo = require('../DAO/mongo/product-dao.mongo')
-const ProductDAOArray = require('../DAO/arrays/cart-dao.arrays')
+const ProductDAOArray = require('../DAO/memory/cart-dao.arrays')
 
 const Product = new ProductDAOMongo()
 const getAll = async (params) => {

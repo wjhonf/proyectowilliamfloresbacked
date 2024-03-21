@@ -17,6 +17,8 @@ form.addEventListener('submit', e => {
         method: 'POST',
         body: JSON.stringify(obj),
     };
+
+    // Ahora fetchParams está declarado antes de usarse en la llamada a fetch()
     fetch(fetchParams.url, {
         headers: fetchParams.headers,
         method: fetchParams.method,
