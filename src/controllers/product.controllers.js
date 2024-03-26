@@ -6,6 +6,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
 const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
+const { generateProducts } = require('../utils/equipos-mock.util');
 const fs = require('fs');
 const router = Router();
 
@@ -150,6 +151,7 @@ router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async 
       .json({ status: 'error', error });
   }
 });
+
 /*
 router.post('/', async (req, res) => {
   try {

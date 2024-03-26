@@ -7,6 +7,7 @@ const cartcontroller = require('../controllers/carts.controller');
 const messagecontroller = require('../controllers/message.controller');
 const paycheckoutcontroller = require('../controllers/paycheckout.controller');
 const ticketController = require('../controllers/ticket.controller');
+const mockingProductsController=require('../controllers/mockingProductsController');
 const router = (app, io) => {
   app.use('/', viewsTemplateController);
   app.use('/users', userscontroller);
@@ -22,6 +23,8 @@ const router = (app, io) => {
   app.get('/consultastock/:pid', cartcontroller);
   app.get('/ticket/:ticketId', ticketController);
   app.use('/ticket/auth', authControlller)
+  app.use('/mockingproducts', mockingProductsController)
+ 
 };
 
 module.exports = router;
