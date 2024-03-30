@@ -47,7 +47,6 @@ class ProductDAO {
   }
   
   async deleteProduct(idProduct) {
-    console.log(idProduct)
     return await Product.deleteOne({ _id: idProduct });
  }
   async insertMany(products) {

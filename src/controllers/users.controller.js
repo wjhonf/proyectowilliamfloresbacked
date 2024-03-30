@@ -46,13 +46,13 @@ router.post(
         httpOnly: true,
       }).json({ status: 'Success', payload: 'Logged in' });
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
     }
   }
 );
 router.get('/fail-register', (req, res) => {
-  console.log('Falló registro')
+  req.logger.error(error);
   res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', error: 'Bad request' })
 })
 router.put('/:uid', async (req, res) => {
@@ -111,28 +111,7 @@ router.get('/current', async (req, res) => {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-/*router.post('/', async (req, res) => {
-  try {
-    const { first_name, last_name, email, password } = req.body
 
-    const newUserInfo = {
-      first_name,
-      last_name,
-      email,
-      password: createHash(password),
-    }
-    const newUser = await usersService.insertOne(newUserInfo)
-
-    res
-      .status(HTTP_RESPONSES.CREATED)
-      .json({ status: 'success', payload: newUser })
-  } catch (error) {
-    console.log(error)
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error })
-  }
-})*/
 
 
 

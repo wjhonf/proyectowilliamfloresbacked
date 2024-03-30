@@ -19,10 +19,8 @@ router.post('/', async (req, res) => {
         if (error.name === 'ValidationError') {
         
             const errorMessages = customizeError(error);
-            console.error('Error al crear el producto:', errorMessages);
             res.status(400).json({ error: 'Datos de producto inválidos', details: errorMessages });
         } else {
-            console.error('Error interno al crear el producto:', error);
             res.status(500).json({ error: 'Error interno del servidor' });
         }
     }

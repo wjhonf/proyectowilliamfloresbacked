@@ -46,7 +46,7 @@ router.post('/', async (req, res) => {
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: savedMessage });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });

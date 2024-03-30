@@ -43,7 +43,7 @@ const initializePassport = () => {
         try {
           const user = await usersService.findOne({ email: username })
           if (user) {
-            console.log('Usuario ya exite')
+            req.logger.info('Usuario ya exite')
             return done(null, false)
           }
           await usersService.createUser(req.body)
@@ -82,14 +82,14 @@ const initializePassport = () => {
 
           return done(null, user)
         } catch (error) {
-          console.log(error)
+          req.logger.error(error);
           done(error)
         }
       }
     )
   )
   passport.serializeUser((user, done) => {
-    console.log(user)
+    req.logger.error(error);
     done(null, user._id)
   })
 

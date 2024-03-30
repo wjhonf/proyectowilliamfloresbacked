@@ -4,18 +4,27 @@ const passport = require('passport')
 const { useValidPassword, createHash } = require('../utils/crypt-password.util')
 const {generateToken} = require('../utils/jwt.util')
 const HTTP_RESPONSES = require('../constants/http-responses.contant')
+const CustomError = require('../handlers/errors/Custom-Error')
+const generateUserErrorInfo = require('../handlers/errors/generate-user-error-info')
+const EErrors = require('../handlers/errors/emun-errors')
+const TYPES_ERRORS = require('../handlers/errors/types.errors')
+
 const router = Router();
 
 router.post('/login', async (req, res) => {
   try {
-    console.log(req.body)
+    req.logger.info(req.body)
     const { email, password } = req.body;
-
-    if (!email || !password)
-      return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', error: 'Bad Request' });
+    if (!email || !password) {
+      CustomError.createError({
+        name: TYPES_ERRORS.USER_CREATION_ERROR,
+        cause: generateUserErrorInfo({password, email }),
+        message: 'Error trying to create User',
+        code: EErrors.INVALID_USER_INFO,
+      })
+    }
   
     const user = await Users.findOne({ email });
-    console.log(user)
     if (!user)
       return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', error: 'Bad Request' });
     const passwordMatch = useValidPassword(user, password);
@@ -29,7 +38,7 @@ router.post('/login', async (req, res) => {
       httpOnly: true,
     }).json({ status: 'Success', payload: 'Logged in' });
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
   }
 });
@@ -47,7 +56,7 @@ router.post('/forgot-password', async (req, res) => {
 
     res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña Actualizada' })
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res.status(HTTP_RESPONSE.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
   }
 })
@@ -84,7 +93,7 @@ router.get(
       });
       res.render('profile',{user});
     } catch (error) {
-      console.log(error);
+      req.logger.error(error);
       res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
     }
   }

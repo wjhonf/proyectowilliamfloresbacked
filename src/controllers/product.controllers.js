@@ -31,7 +31,7 @@ router.get('/',  passportCall('jwt'),authorization('user'),isAdmin, async (req, 
       pagination: response,
     });
   } catch (error) {
-    console.error(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
@@ -49,7 +49,7 @@ router.get('/:id', passportCall('jwt'),authorization('user'), async (req, res) =
      
     res.json({ status: 'success', payload: product });
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -99,7 +99,7 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, 
       .json({ status: 'success', payload: 'Equipo registrado exitosamente'});
     //res.redirect('/products');
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -131,7 +131,7 @@ router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, async (req
       .status(HTTP_RESPONSES.OK)
       .json({ status: 'success', payload: updatedProductInfo });
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -145,41 +145,11 @@ router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async 
       .status(HTTP_RESPONSES.OK)
       .json({ status: 'success', message: 'Product deleted successfully' });
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
   }
 });
 
-/*
-router.post('/', async (req, res) => {
-  try {
-    const rawData = fs.readFileSync('../proyectowilliamfloresbacked/equipos.json');
-    const products = JSON.parse(rawData);
-
-    if (!products || products.length === 0) {
-      return res
-        .status(HTTP_RESPONSES.BAD_REQUEST)
-        .json({ status: 'error', error: 'No products provided' });
-    }
-    for (const product of products) {
-      if (!product.title || !product.code || !product.price || !product.stock) {
-        return res
-          .status(HTTP_RESPONSES.BAD_REQUEST)
-          .json({ status: 'error', error: 'Incomplete or invalid product data' });
-      }
-    }
-    const newProducts = await productsService.insertMany(products);
-    res
-      .status(HTTP_RESPONSES.CREATED)
-      .json({ status: 'success', payload: newProducts });
-  } catch (error) {
-    console.error(error);
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error: 'Internal server error' });
-  }
-});
-*/
 module.exports = router;

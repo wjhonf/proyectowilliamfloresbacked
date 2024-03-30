@@ -6,15 +6,21 @@ const passportCall = require('../utils/passport-call.util')
 const User = require('../DAO/mongo/models/user.model');
 const authorization = require('../middleware/authorization.middleware')
 const router = Router()
+
 router.get('/login', (req, res) => {
-  if (req.user) {
-    const user= req.user
-    res.redirect('/home',{user});
-  } else {
-    res.render('login', { layout: false });
+  try {
+    if (req.user) {
+      
+      const user = req.user;
+      res.redirect('/home', { user });
+    } else {
+      res.render('login', { layout: false });
+    }
+  } catch (error) {
+    req.logger.error(error.message)
+    res.status(500).send('Hubo un error en el servidor'); 
   }
 });
-
 router.get('/',  passportCall('jwt'),authorization('user'), (req, res) => {
   if (req.user) {
     const user= req.user

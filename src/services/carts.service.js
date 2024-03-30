@@ -133,7 +133,6 @@ const checkProductStockInCart = async (productId, desiredQuantity) => {
     const productInCart = await Cart.checkProductStock(productId, desiredQuantity);
     return { success: true, productInCart }; // Indica que la verificación del stock fue exitosa
   } catch (error) {
-    console.error('Error en el servicio:', error);
     return { success: false, error: error.message }; // Devuelve el mensaje de error
   }
 };

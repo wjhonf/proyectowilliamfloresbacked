@@ -5,11 +5,9 @@ class usersMongoDao {
   }
 
   async create(newUserInfo) {
-    console.log('Creado desde el DAO')
     return await User.create(newUserInfo)
   }
   async findOne(query) {
-    console.log('Buscando usuario desde el DAO');
     return await User.findOne(query);
   }
   

@@ -33,7 +33,7 @@ router.get('/', passportCall('jwt'),authorization('user'),isUser, async (req, re
       pagination: response,
     });
   } catch (error) {
-    console.error(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
@@ -56,7 +56,7 @@ router.get('/view', passportCall('jwt'),authorization('user'), isAdmin, async (r
       pagination: response,
     });
   } catch (error) {
-    console.error(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
@@ -75,7 +75,7 @@ router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (
 });
 router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
-    console.log(req.body)
+    req.logger.info(req.body)
     const { userId, nombre, direccion, email, items, totalPrice } = req.body;
     if (!userId || !nombre || !direccion || !email || !items) {
       return res
@@ -88,19 +88,17 @@ router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
         .json({ status: 'error', error: 'Datos de productos inválidos' });
     }
     const newCartData = { userId, nombre, direccion, email, items, totalPrice};
-    console.log(newCartData)
+    req.logger.info(newCartData)
     const newCart = await cartsService.insertOne(newCartData);
     const message = await cartsService.processPurchase(newCart._id, items);
     const ticketCode = generateTicketCode();
-    console.log(ticketCode);
     const ticketnew = { code: ticketCode, amount: totalPrice, purchaser: email };
-    console.log("datos",ticketnew);
     const ticket = await ticketService.generateTicket(ticketnew);
     res
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: newCart, message, ticketCode: ticketnew.code});
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error: error.message });
@@ -114,7 +112,7 @@ router.delete('/carts/:id',passportCall('jwt'),authorization('user'), async (req
       .status(HTTP_RESPONSES.OK)
       .json({ status: 'success', message: 'Product deleted successfully' });
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -133,7 +131,7 @@ router.get('/:id',passportCall('jwt'),authorization('user'), async (req, res) =>
      
     res.json({ status: 'success', payload: product });
   } catch (error) {
-    console.log(error)
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -192,7 +190,7 @@ router.post('/:cid/purchase', passportCall('jwt'), authorization('user'), async 
       res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Compra completada exitosamente', ticket: newTicket });
     }
   } catch (error) {
-    console.error(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
   }
 });
@@ -207,7 +205,7 @@ router.get('/consultastock/:pid', passportCall('jwt'), authorization('user'), as
       res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error',  productInCart: result.productInCart });
     }
   } catch (error) {
-    console.error(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
   }
 });

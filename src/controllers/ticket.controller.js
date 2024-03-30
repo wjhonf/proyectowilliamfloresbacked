@@ -13,7 +13,7 @@ router.get('/ticket/:ticketId',passportCall('jwt'),authorization('user'), async 
       const user= req.user
       const { ticketId } = req.params;
       const ticket = await ticketService.getTicketById(ticketId);
-      console.log(ticket)
+      req.logger.info(req.body)
       if (!ticket) {
         return res.status(HTTP_RESPONSES.NOT_FOUND).json({ status: 'error', error: 'Ticket no encontrado' });
       }
@@ -21,7 +21,7 @@ router.get('/ticket/:ticketId',passportCall('jwt'),authorization('user'), async 
 
       res.render('view-ticket', { ticket: ticketObj, user });
     } catch (error) {
-      console.error('Error al obtener el ticket:', error);
+      req.logger.error(error);
       res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
     }
   });

@@ -32,7 +32,7 @@ class CartDAO {
   }
   async creamosUno(newCartInfo) {
     try {
-      console.log('Creado desde el DAO');
+      req.logger.info('Creado desde el DAO');
       return await Carts.create(newCartInfo);
     } catch (error) {
       throw error;

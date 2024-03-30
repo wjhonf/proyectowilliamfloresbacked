@@ -16,6 +16,11 @@ const initializePassport = require('./configs/passport.config')
 
 const passport = require('passport')
 const app = express();
+const addLogger = require('./utils/winston/logger');
+const logger = require('./middleware/logger.middleware');
+
+app.use(logger);
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser());

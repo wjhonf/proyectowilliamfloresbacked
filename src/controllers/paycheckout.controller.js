@@ -11,7 +11,6 @@ const router = Router();
 
 router.get('/', passportCall('jwt'),authorization('user'),isUser, async (req, res) => {
     const { user } =req;
-    console.log(user)
     res.render('paycheckout', {user});
 });
 module.exports = router;

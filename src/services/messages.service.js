@@ -5,7 +5,6 @@ const Message = new MessageDAOMongo()
 const getAll = async () => {
   try {
     const Menssages = await Message.tomaTodo()
-    console.log('Obtenemos todos desde el service')
     return Menssages
   } catch (error) {
     throw error
