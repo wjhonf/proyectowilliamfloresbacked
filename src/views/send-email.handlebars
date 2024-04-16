@@ -1,0 +1,65 @@
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title">Recuperar Contraseña</h6>
+                </div>
+                <div class="card-body">
+                    <form id="resetPasswordForm">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo Electrónico:</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const resetPasswordForm = document.getElementById('resetPasswordForm');
+
+    resetPasswordForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+
+        try {
+            const response = await fetch('/send-reset-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            if (response.ok) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Correo enviado',
+                    text: 'Se ha enviado un correo electrónico para restablecer la contraseña.'
+                });
+                window.location.href = '/home'; 
+            } else {
+                const errorData = await response.json();
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorData.error
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            await Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ha ocurrido un error al procesar la solicitud. Por favor, inténtalo de nuevo más tarde.'
+            });
+        }
+    });
+});
+
+</script>

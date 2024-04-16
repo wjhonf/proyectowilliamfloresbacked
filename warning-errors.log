@@ -32,3 +32,19 @@ warning: Esto es warning
 fatal: Esto es fatal.
 error: Esto es error
 warning: Esto es warning
+fatal: Esto es fatal.
+error: Esto es error
+warning: Esto es warning
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"_message":"product validation failed","errors":{"owner":{"kind":"ObjectId","message":"Cast to ObjectId failed for value \"admin\" (type string) at path \"owner\" because of \"BSONError\"","name":"CastError","path":"owner","reason":{},"stringValue":"\"admin\"","value":"admin","valueType":"string"}}}
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"code":"ERR_HTTP_INVALID_STATUS_CODE"}
+error: undefined {"code":"ERR_HTTP_INVALID_STATUS_CODE"}

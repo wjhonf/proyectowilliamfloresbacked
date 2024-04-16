@@ -18,9 +18,21 @@ const createUser = async newUser => {
 const findOne = async query => {
   return await UsersRepository.findOne(query); 
 };
-
+const comabiarrol = async userId => {
+  try {
+    const user = await UsersRepository.findOne({ _id: userId });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    user.role = 'premium';
+    await user.save();
+  } catch (error) {
+    throw new Error(`Failed to change user role to premium: ${error.message}`);
+  }
+};
 module.exports = {
   getUsers,
   createUser,
   findOne,
+  comabiarrol,
 };

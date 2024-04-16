@@ -34,6 +34,10 @@ const productSchema = new mongoose.Schema({
     type: String,
     default: "img/equipo3.jpg"
   },
+  owner: {
+    type: String,
+    default: 'admin'
+  },
   createdAt: Date,
   updatedAt: Date,
 });

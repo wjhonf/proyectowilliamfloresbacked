@@ -1,5 +1,15 @@
+let owner = '';
+document.addEventListener("DOMContentLoaded", function() {
+  document.getElementById("propietario").addEventListener("change", function() {
+    if (this.checked) {
+      owner = document.getElementById("iduser").value;
+    } else {
+      owner = '';
+    }
+  });
+});
 document.getElementById("guardarequipo").addEventListener("click", function(event) {
-  event.preventDefault(); 
+  event.preventDefault();
   const formData = {
     title: document.getElementById("title").value,
     code: document.getElementById("code").value,
@@ -7,7 +17,8 @@ document.getElementById("guardarequipo").addEventListener("click", function(even
     stock: document.getElementById("stock").value,
     category: document.getElementById("category").value,
     thumbnail: document.getElementById("thumbnail").value,
-    description: document.getElementById("description").value
+    description: document.getElementById("description").value,
+    owner:owner
   };
   fetch("/products", {
     method: "POST",
@@ -54,31 +65,66 @@ document.getElementById('searchButton').addEventListener('click', function() {
   window.location.href = `/products${query}`;
 });
 let productIdToDelete;
+
 function setProductIdToDelete(id) {
-productIdToDelete = id;
+  productIdToDelete = id;
 }
+
 function deleteProduct() {
-if (productIdToDelete) {
-fetch('/products/' + productIdToDelete, {
-method: 'DELETE'
-})
-.then(response => response.json())
-.then(data => {
-$('#deleteModal').modal('hide');
-Swal.fire({
-toast: true,
-icon: 'error',
-title: 'Equipo Elimiando',
-animation: false,
-position: 'top-end',
-showConfirmButton: false,
-timer: 700000,
-timerProgressBar: true,
-})
-window.location.href = '/products'; 
-})
-.catch(error => console.error('Error:', error));
-}
+  if (productIdToDelete) {
+    fetch('/products/' + productIdToDelete, {
+      method: 'DELETE'
+    })
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else if (response.status === 400) {
+        throw new Error('No tienes permisos para eliminar este producto');
+      } else if (response.status === 404) {
+        throw new Error('Producto no encontrado');
+      } else {
+        throw new Error('Error al eliminar el producto');
+      }
+    })
+    .then(data => {
+      $('#deleteModal').modal('hide');
+      Swal.fire({
+        toast: true,
+        icon: 'success',
+        title: 'Producto Eliminado',
+        animation: false,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1500
+      });
+      window.location.href = '/products'; 
+    })
+    .catch(error => {
+      console.error('Error al eliminar el producto:', error.message);
+      $('#deleteModal').modal('hide');
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: error.message,
+        animation: false,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    });
+  } else {
+    console.error('No se ha establecido ningún ID de producto para eliminar');
+    $('#deleteModal').modal('hide');
+    Swal.fire({
+      toast: true,
+      icon: 'error',
+      title: 'No se ha establecido ningún ID de producto para eliminar',
+      animation: false,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500
+    });
+  }
 }
 function loadProductData(productId) {
   $.ajax({

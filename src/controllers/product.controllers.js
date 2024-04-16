@@ -8,6 +8,7 @@ const authorization = require('../middleware/authorization.middleware')
 const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
 const { generateProducts } = require('../utils/equipos-mock.util');
 const fs = require('fs');
+const path = require('path');
 const router = Router();
 
 router.get('/',  passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
@@ -74,14 +75,13 @@ router.get('/details/:cartId', passportCall('jwt'),authorization('user'), async 
 
 router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
-    const { title, description, code, price, stock, category, thumbnail } = req.body;
-
+    const { title, description, code, price, stock, category, thumbnail, owner} = req.body;
+    const productOwner = owner ? owner : 'admin';
     if (!title || !code || !price || !stock) {
       return res
         .status(HTTP_RESPONSES.BAD_REQUEST)
         .json({ status: 'error', error: 'Incomplete or invalid product data' });
     }
-    
     const newProductInfo = {
       title,
       description,
@@ -90,16 +90,19 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, 
       stock,
       category,
       thumbnail,
+      owner: productOwner,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
+    console.log(newProductInfo)
     const newProduct = await productsService.insertOne(newProductInfo);
     res
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: 'Equipo registrado exitosamente'});
     //res.redirect('/products');
   } catch (error) {
-    req.logger.error(error);
+    console.log(error)
+    //req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -137,7 +140,30 @@ router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, async (req
       .json({ status: 'error', error });
   }
 });
-router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {
+router.delete('/:id', passportCall('jwt'), authorization('user'), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsService.getProductById(id);
+
+    if (!product) {
+      return res.status(HTTP_RESPONSES.NOT_FOUND).json({ status: 'error', message: 'Producto no encontrado' });
+    }
+    if (req.user.role === 'admin') {
+      await productsService.deleteProductById(id);
+      return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+    }
+    if (req.user.role === 'premium' && (!product.owner || product.owner.toString() === req.user.id.toString())) {
+      await productsService.deleteProductById(id);
+      return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+    } else {
+      return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', message: 'No tienes permisos para eliminar este producto' });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
+/*router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {
   try {
     const { id } = req.params;
     await productsService.deleteProductById(id);
@@ -150,6 +176,59 @@ router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async 
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
   }
-});
+});*/
+
+
+/*
+router.post('/', async (req, res) => {
+  try {
+    
+    const filePath = path.join(__dirname, '../equipos.json');
+    console.log(filePath)
+  
+    const productsToRegister = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+    if (!Array.isArray(productsToRegister)) {
+      return res
+        .status(HTTP_RESPONSES.BAD_REQUEST)
+        .json({ status: 'error', error: 'Invalid batch product data. Expected an array.' });
+    }
+
+    for (const productData of productsToRegister) {
+      const { title, description, code, price, stock, category, thumbnail, owner} = productData;
+      const productOwner = owner ? owner : 'admin';
+
+      if (!title || !code || !price || !stock) {
+        return res
+          .status(HTTP_RESPONSES.BAD_REQUEST)
+          .json({ status: 'error', error: 'Incomplete or invalid product data' });
+      }
+
+      const newProductInfo = {
+        title,
+        description,
+        code,
+        price,
+        stock,
+        category,
+        thumbnail,
+        owner: productOwner,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      const newProduct = await productsService.insertOne(newProductInfo);
+    }
+
+    res
+      .status(HTTP_RESPONSES.CREATED)
+      .json({ status: 'success', payload: 'Lote de productos registrado exitosamente'});
+  } catch (error) {
+    console.log(error);
+    res
+      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
+      .json({ status: 'error', error });
+  }
+});*/
 
 module.exports = router;

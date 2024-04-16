@@ -18,7 +18,7 @@ const passport = require('passport')
 const app = express();
 const addLogger = require('./utils/winston/logger');
 const logger = require('./middleware/logger.middleware');
-
+const winstonLogger = require('./utils/winston/factory');
 app.use(logger);
 
 app.use(express.json());
@@ -47,7 +47,7 @@ app.use(passport.initialize())
 //app.use(passport.session())
 
 const httpServer = app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${port}`);
+  winstonLogger.info(`Servidor escuchando en el puerto ${port}`);
 });
 
 const io = new Server(httpServer);
@@ -56,11 +56,11 @@ io.on('connection', socket => {
   socket.on('addProduct', data => {
     axios.post('http://localhost:8080/api/products', data)
       .then(response => {
-        console.log('Producto agregado:', response.data);
+        winstonLogger.info(`Servidor escuchando en el puerto`, response.data);
         io.emit('productAdded', response.data);
       })
       .catch(error => {
-        console.error('Error al agregar producto:', error.message);
+        winstonLogger.error(`Servidor escuchando en el puerto`, error.message);
       });
   });
 });

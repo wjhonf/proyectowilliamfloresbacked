@@ -15,12 +15,15 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: 'user',
+    enum: ['user', 'admin', 'premium'], 
+    default: 'user' 
   },
   githubId: Number,
   githubUsername: String,
   gmailId: Number,
   facebookId: Number,
+  resetPasswordToken: String, 
+  resetPasswordExpires: Date,
 })
 const Users = mongoose.model(userCollection, userSchema)
 

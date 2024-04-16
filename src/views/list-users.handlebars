@@ -1,0 +1,93 @@
+<br>
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-6">
+        Lista de Usuarios del Sistema
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr>
+              <td>{{this.first_name}}</td>
+              <td>{{this.email}}</td>
+              <td>{{this.role}}</td>
+              <td>
+                <button type="button" class="btn btn-success btn-sm" onclick="editUserRole('{{this._id}}')">Activar - Premiun</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>
+function editUserRole(userId) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: '¿Quieres cambiar el rol del usuario a Premium?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Si',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const url = `/users/premium/${userId}`;
+      fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ userId: userId }) 
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to activate premium');
+        }
+        return response.json();
+      })
+      .then(data => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Usuario ahora es Premium',
+          text: 'El rol del usuario ha sido cambiado a Premium correctamente',
+          showConfirmButton: false,
+          timer: 2000
+        });
+         window.location.href = '/users';
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'No se pudo activar el usuario a Premium',
+          showConfirmButton: false,
+          timer: 2000
+        });
+      });
+    }
+  });
+}
+</script>
+
+
+
+ 
+
+ 
+
+

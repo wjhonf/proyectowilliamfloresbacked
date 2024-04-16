@@ -1,7 +1,8 @@
 const { Router } = require('express');
 const Users = require('../DAO/mongo/models/user.model');
 const passport = require('passport')
-const { useValidPassword, createHash } = require('../utils/crypt-password.util')
+const { useValidPassword, createHash, resetPassword, generatePasswordResetToken} = require('../utils/crypt-password.util')
+const {sendPasswordResetEmail} = require('../utils/emailUtils')
 const {generateToken} = require('../utils/jwt.util')
 const HTTP_RESPONSES = require('../constants/http-responses.contant')
 const CustomError = require('../handlers/errors/Custom-Error')
@@ -13,7 +14,6 @@ const router = Router();
 
 router.post('/login', async (req, res) => {
   try {
-    req.logger.info(req.body)
     const { email, password } = req.body;
     if (!email || !password) {
       CustomError.createError({
@@ -57,10 +57,31 @@ router.post('/forgot-password', async (req, res) => {
     res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña Actualizada' })
   } catch (error) {
     req.logger.error(error);
-    res.status(HTTP_RESPONSE.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
   }
 })
-
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+    await resetPassword(token, newPassword);
+    res.clearCookie('authToken');
+    res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña restablecida exitosamente' });
+  } catch (error) {
+    req.logger.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
+  }
+});
+router.post('/send-reset-email', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const token = await generatePasswordResetToken(email);
+    await sendPasswordResetEmail(email, token);
+    res.redirect('/home')
+  } catch (error) {
+    req.logger.error(error);
+    res.status(500).json({ error: 'Error al procesar la solicitud' });
+  }
+});
 router.get(
   '/github',
   passport.authenticate('github', { session: false, scope: ['user:email'] })

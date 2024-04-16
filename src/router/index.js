@@ -11,6 +11,7 @@ const logertestcontroller=require('../controllers/loger-test.controller');
 const router = (app, io) => {
   app.use('/', viewsTemplateController);
   app.use('/users', userscontroller);
+  app.use('/', authControlller);
   app.use('/auth', authControlller);
   app.use('/auth/auth', authControlller);
   app.use('/listcarts/auth', authControlller)

@@ -1,0 +1,312 @@
+[
+  {
+    "title": "Laptop HP EliteBook",
+    "description": "Laptop empresarial de alto rendimiento con seguridad mejorada",
+    "code": "LP001",
+    "price": 1200.00,
+    "stock": 30,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo1.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC de Escritorio Dell",
+    "description": "PC de escritorio potente para uso doméstico y empresarial",
+    "code": "PC002",
+    "price": 800.00,
+    "stock": 20,
+    "category": "PCs",
+    "thumbnail": "../img/equipo2.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Epson EcoTank",
+    "description": "Impresora de inyección de tinta con sistema de tanque de tinta",
+    "code": "IMP003",
+    "price": 300.00,
+    "stock": 15,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo3.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Router Cisco",
+    "description": "Router de red empresarial para una conectividad rápida y segura",
+    "code": "NET004",
+    "price": 150.00,
+    "stock": 25,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo4.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop Dell Inspiron",
+    "description": "Laptop versátil para uso diario y entretenimiento",
+    "code": "LP005",
+    "price": 900.00,
+    "stock": 22,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC Gamer HP Omen",
+    "description": "PC de escritorio diseñada para juegos de alta gama",
+    "code": "PC006",
+    "price": 1500.00,
+    "stock": 18,
+    "category": "PCs",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Brother LaserJet",
+    "description": "Impresora láser monocromática para documentos de alta calidad",
+    "code": "IMP007",
+    "price": 250.00,
+    "stock": 12,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Switch TP-Link",
+    "description": "Switch de red para una conectividad eficiente",
+    "code": "NET008",
+    "price": 80.00,
+    "stock": 30,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop Lenovo ThinkPad",
+    "description": "Laptop resistente y confiable para uso empresarial",
+    "code": "LP009",
+    "price": 1100.00,
+    "stock": 25,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC Todo-en-Uno Apple iMac",
+    "description": "PC elegante con pantalla integrada para usuarios creativos",
+    "code": "PC010",
+    "price": 1800.00,
+    "stock": 15,
+    "category": "PCs",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+
+  },
+  {
+    "title": "Impresora Canon PIXMA",
+    "description": "Impresora todo-en-uno para impresiones y escaneos versátiles",
+    "code": "IMP011",
+    "price": 200.00,
+    "stock": 20,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Firewall Fortinet",
+    "description": "Firewall para proteger la red contra amenazas cibernéticas",
+    "code": "NET012",
+    "price": 1200.00,
+    "stock": 10,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop Acer Aspire",
+    "description": "Laptop asequible con buen rendimiento para tareas diarias",
+    "code": "LP013",
+    "price": 600.00,
+    "stock": 28,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC HP Pavilion",
+    "description": "PC de escritorio con estilo para entretenimiento y productividad",
+    "code": "PC014",
+    "price": 1000.00,
+    "stock": 16,
+    "category": "PCs",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Samsung Xpress",
+    "description": "Impresora láser a color para documentos y presentaciones",
+    "code": "IMP015",
+    "price": 350.00,
+    "stock": 18,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo5.jpg",
+    "owner":"admin"
+  },{
+    "title": "Laptop Dell XPS",
+    "description": "Laptop premium con pantalla InfinityEdge para una experiencia inmersiva",
+    "code": "LP031",
+    "price": 1600.00,
+    "stock": 20,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC Lenovo ThinkCentre",
+    "description": "PC de escritorio compacta y potente para entornos profesionales",
+    "code": "PC032",
+    "price": 1200.00,
+    "stock": 15,
+    "category": "PCs",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora HP OfficeJet Pro",
+    "description": "Impresora todo-en-uno para productividad en la oficina",
+    "code": "IMP033",
+    "price": 280.00,
+    "stock": 18,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Router ASUS RT-AX88U",
+    "description": "Router Wi-Fi 6 para una conectividad de alta velocidad",
+    "code": "NET034",
+    "price": 220.00,
+    "stock": 25,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop Apple MacBook Air",
+    "description": "Laptop ultradelgada con chip M1 para rendimiento excepcional",
+    "code": "LP035",
+    "price": 1800.00,
+    "stock": 22,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC Gaming CyberPowerPC",
+    "description": "PC de escritorio gaming con iluminación RGB y potente GPU",
+    "code": "PC036",
+    "price": 1400.00,
+    "stock": 20,
+    "category": "PCs",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Epson WorkForce",
+    "description": "Impresora láser para entornos de trabajo intensivos",
+    "code": "IMP037",
+    "price": 320.00,
+    "stock": 15,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Switch Cisco Catalyst",
+    "description": "Switch de red gestionable para entornos empresariales",
+    "code": "NET038",
+    "price": 350.00,
+    "stock": 18,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop ASUS VivoBook",
+    "description": "Laptop ultradelgada con pantalla NanoEdge para portabilidad",
+    "code": "LP039",
+    "price": 900.00,
+    "stock": 25,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC HP EliteDesk",
+    "description": "PC de escritorio empresarial con diseño compacto y alto rendimiento",
+    "code": "PC040",
+    "price": 1300.00,
+    "stock": 16,
+    "category": "PCs",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Lexmark CX517de",
+    "description": "Impresora láser a color con funciones avanzadas de impresión",
+    "code": "IMP041",
+    "price": 400.00,
+    "stock": 12,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Router TP-Link Archer C4000",
+    "description": "Router tri-banda para una red doméstica rápida y estable",
+    "code": "NET042",
+    "price": 280.00,
+    "stock": 20,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Laptop MSI Prestige",
+    "description": "Laptop para creadores con potente rendimiento gráfico",
+    "code": "LP043",
+    "price": 1500.00,
+    "stock": 18,
+    "category": "Laptops",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "PC Dell OptiPlex",
+    "description": "PC de escritorio confiable y eficiente para entornos empresariales",
+    "code": "PC044",
+    "price": 1100.00,
+    "stock": 22,
+    "category": "PCs",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Impresora Brother DCP-L2540DW",
+    "description": "Impresora láser multifunción con conectividad inalámbrica",
+    "code": "IMP045",
+    "price": 250.00,
+    "stock": 30,
+    "category": "Impresoras",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  },
+  {
+    "title": "Switch D-Link DGS-1210",
+    "description": "Switch inteligente para redes empresariales con PoE",
+    "code": "NET046",
+    "price": 180.00,
+    "stock": 15,
+    "category": "Equipos de Red",
+    "thumbnail": "../img/equipo6.jpg",
+    "owner":"admin"
+  }
+]

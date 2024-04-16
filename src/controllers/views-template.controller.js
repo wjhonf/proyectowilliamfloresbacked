@@ -48,8 +48,17 @@ router.get('/profile', passportCall('jwt'), authorization('user'), async (req, r
   const user = req.user;
   res.render('profile', {user})
 })
+router.get('/send-email', passportCall('jwt'), authorization('user'), (req, res) => {
+  const user = req.user;
+  res.render('send-email', {user} ); 
+});
+router.get('/reset-password', (req, res) => {
+  const user = req.user;
+  res.render('reset-password', { layout: false } ); 
+});
 router.get('/forgotPassword', (req, res) => {
 
   res.render('forgot-Password'); 
 })
+
 module.exports = router

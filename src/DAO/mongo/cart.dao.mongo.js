@@ -32,7 +32,6 @@ class CartDAO {
   }
   async creamosUno(newCartInfo) {
     try {
-      req.logger.info('Creado desde el DAO');
       return await Carts.create(newCartInfo);
     } catch (error) {
       throw error;
@@ -100,7 +99,7 @@ class CartDAO {
       
       return true;
     } catch (error) {
-      return error.message; // Devolver el mensaje de error si ocurre alguno
+      return error.message; 
     }
   }
   

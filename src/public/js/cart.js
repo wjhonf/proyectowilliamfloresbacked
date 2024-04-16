@@ -5,6 +5,7 @@ let contadorCarrito;
 function actualizarContadorCarrito() {
     contadorCarrito.innerText = carrito.length;
 }
+
 document.addEventListener('DOMContentLoaded', function() {
     const enlaceCarrito = document.getElementById('micarrito');
     enlaceCarrito.classList.remove('d-none');
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 try {
                     const detallesProducto = await obtenerDetallesProductoDesdeAPI(productId);
                     if (detallesProducto && detallesProducto.status === 'success' && detallesProducto.payload) {
+                        
                         carrito.push({
                             id: productId,
                             equipo: detallesProducto.payload.title,

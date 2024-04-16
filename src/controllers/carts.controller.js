@@ -88,7 +88,6 @@ router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
         .json({ status: 'error', error: 'Datos de productos inválidos' });
     }
     const newCartData = { userId, nombre, direccion, email, items, totalPrice};
-    req.logger.info(newCartData)
     const newCart = await cartsService.insertOne(newCartData);
     const message = await cartsService.processPurchase(newCart._id, items);
     const ticketCode = generateTicketCode();
