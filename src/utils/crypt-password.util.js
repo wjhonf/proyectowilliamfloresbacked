@@ -16,7 +16,7 @@ const generatePasswordResetToken = async (email) => {
   if (!user) throw new Error('Usuario no encontrado');
   const token = crypto.randomBytes(32).toString('hex');
   const currentTime = new Date();
-  currentTime.setMinutes(currentTime.getMinutes() + 5); 
+  const expirationTime = new Date(currentTime.getTime() + (60 * 60 * 1000)); 
   user.resetPasswordToken = token;
   user.resetPasswordExpires = currentTime;
   await user.save();
@@ -24,7 +24,7 @@ const generatePasswordResetToken = async (email) => {
 };
 const resetPassword = async (token, newPassword) => {
   const currentTime = new Date();
-  const expirationTime = new Date(currentTime.getTime() - (5 * 60000)); 
+  const expirationTime = new Date(currentTime.getTime() - (60 * 60 * 1000));
   const user = await Users.findOne({
     resetPasswordToken: token,
     resetPasswordExpires: { $gt: expirationTime } 

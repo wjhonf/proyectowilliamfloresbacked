@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 });
+
 document.getElementById("guardarequipo").addEventListener("click", function(event) {
   event.preventDefault();
   const formData = {
@@ -142,6 +143,7 @@ function loadProductData(productId) {
           $('#editCategory').val('');
           $('#editThumbnail').val('');
           $('#editDescription').val('');
+          $('#propietario').prop('checked', false);
         });
         $('#id').val(product._id);
         $('#editTitle').val(product.title);
@@ -151,6 +153,13 @@ function loadProductData(productId) {
         $('#editCategory').val(product.category);
         $('#editThumbnail').val(product.thumbnail);
         $('#editDescription').val(product.description);
+        var checkbox = document.getElementById("editpropietario");
+        if (product.owner !== 'admin') {
+            checkbox.checked = true; 
+        }
+        else{
+          checkbox.checked = false;
+        }
       } else {
         Swal.fire({
           toast: true,
@@ -179,7 +188,14 @@ function loadProductData(productId) {
   });
 }
 function saveProductChanges() {
-  var productId = $('#id').val(); 
+  let productId = $('#id').val();
+  let owner =""
+  var checkbox = document.getElementById("editpropietario");
+  if (checkbox.checked) {
+    owner =document.getElementById("iduser").value
+  } else {
+    owner=''  
+  }
   var updatedProductData = {
     title: $('#editTitle').val(),
     code: $('#editCode').val(),
@@ -188,6 +204,8 @@ function saveProductChanges() {
     category: $('#editCategory').val(),
     thumbnail: $('#editThumbnail').val(),
     description: $('#editDescription').val(),
+    owner:owner,
+    
   };
   $.ajax({
     url: `/products/${productId}`,

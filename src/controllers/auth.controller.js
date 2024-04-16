@@ -47,19 +47,6 @@ router.get('/logout', (req, res) => {
   res.redirect('/login'); 
 });
 
-router.post('/forgot-password', async (req, res) => {
-  try {
-    const { email, password } = req.body
-    const passwordEncrypted = createHash(password)
-
-    await Users.updateOne({ email }, { password: passwordEncrypted })
-
-    res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña Actualizada' })
-  } catch (error) {
-    req.logger.error(error);
-    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
-  }
-})
 router.post('/reset-password', async (req, res) => {
   try {
     const { token, newPassword } = req.body;
@@ -76,7 +63,7 @@ router.post('/send-reset-email', async (req, res) => {
     const { email } = req.body;
     const token = await generatePasswordResetToken(email);
     await sendPasswordResetEmail(email, token);
-    res.redirect('/home')
+    res.redirect('/login')
   } catch (error) {
     req.logger.error(error);
     res.status(500).json({ error: 'Error al procesar la solicitud' });
@@ -119,8 +106,20 @@ router.get(
     }
   }
 );
+/*
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email, password } = req.body
+    const passwordEncrypted = createHash(password)
 
+    await Users.updateOne({ email }, { password: passwordEncrypted })
 
+    res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña Actualizada' })
+  } catch (error) {
+    req.logger.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' })
+  }
+})
 
 
 /*const users = [

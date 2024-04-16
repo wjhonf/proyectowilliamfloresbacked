@@ -48,9 +48,9 @@ router.get('/profile', passportCall('jwt'), authorization('user'), async (req, r
   const user = req.user;
   res.render('profile', {user})
 })
-router.get('/send-email', passportCall('jwt'), authorization('user'), (req, res) => {
-  const user = req.user;
-  res.render('send-email', {user} ); 
+router.get('/send-email', (req, res) => {
+
+  res.render('send-email',{ layout: false }); 
 });
 router.get('/reset-password', (req, res) => {
   const user = req.user;

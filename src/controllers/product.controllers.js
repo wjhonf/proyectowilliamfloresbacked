@@ -101,8 +101,7 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, 
       .json({ status: 'success', payload: 'Equipo registrado exitosamente'});
     //res.redirect('/products');
   } catch (error) {
-    console.log(error)
-    //req.logger.error(error);
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
@@ -111,7 +110,8 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, 
 router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, code, price, stock, category, thumbnail } = req.body;
+    const { title, description, code, price, stock, category, thumbnail, owner } = req.body;
+    const productOwner = owner ? owner : 'admin';
     if (!title || !code || !price || !stock) {
       return res
         .status(HTTP_RESPONSES.BAD_REQUEST)
@@ -125,6 +125,7 @@ router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, async (req
       stock,
       category,
       thumbnail,
+      owner: productOwner,
       updatedAt: new Date(),
     };
 
