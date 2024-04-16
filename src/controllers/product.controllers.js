@@ -94,7 +94,7 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, async (req, 
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    console.log(newProductInfo)
+    
     const newProduct = await productsService.insertOne(newProductInfo);
     res
       .status(HTTP_RESPONSES.CREATED)
@@ -160,7 +160,7 @@ router.delete('/:id', passportCall('jwt'), authorization('user'), async (req, re
       return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', message: 'No tienes permisos para eliminar este producto' });
     }
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     return res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
