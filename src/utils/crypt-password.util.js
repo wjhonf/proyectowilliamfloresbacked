@@ -13,29 +13,35 @@ const useValidPassword = (user, password) => {
 
 const generatePasswordResetToken = async (email) => {
   const user = await Users.findOne({ email });
-  if (!user) throw new Error('User not found');
-
+  if (!user) throw new Error('Usuario no encontrado');
   const token = crypto.randomBytes(32).toString('hex');
-  const expirationDate = new Date();
-  expirationDate.setMinutes(expirationDate.getMinutes() + 3); 
+  const currentTime = new Date();
+  currentTime.setMinutes(currentTime.getMinutes() + 5); 
   user.resetPasswordToken = token;
-  user.resetPasswordExpires = expirationDate;
+  user.resetPasswordExpires = currentTime;
   await user.save();
   return token;
 };
 const resetPassword = async (token, newPassword) => {
+  const currentTime = new Date();
+  const expirationTime = new Date(currentTime.getTime() - (5 * 60000)); 
   const user = await Users.findOne({
     resetPasswordToken: token,
-    
+    resetPasswordExpires: { $gt: expirationTime } 
   });
   if (!user) {
     throw new Error('Token inválido o expirado');
   }
   try {
     const passwordEncrypted = createHash(newPassword);
-    await Users.updateOne({ _id: user._id }, { password: passwordEncrypted });
-    await Users.updateOne({ _id: user._id }, { resetPasswordToken: null, resetPasswordExpires: null });
-
+    await Users.updateOne(
+      { _id: user._id }, 
+      { 
+          password: passwordEncrypted,
+          resetPasswordToken: null, 
+          resetPasswordExpires: null 
+      }
+  );
     return true; 
   } catch (error) {
     throw new Error('Error al restablecer la contraseña');

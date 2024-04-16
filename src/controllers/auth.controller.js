@@ -68,7 +68,7 @@ router.post('/reset-password', async (req, res) => {
     res.status(HTTP_RESPONSES.OK).json({ status: 'Success', message: 'Contraseña restablecida exitosamente' });
   } catch (error) {
     req.logger.error(error);
-    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Token  expirado' });
   }
 });
 router.post('/send-reset-email', async (req, res) => {
