@@ -60,17 +60,20 @@ router.get('/view', passportCall('jwt'),authorization('user'), isAdmin, async (r
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (req, res) => {
-  try {
-      const cartId = req.params.cartId;
-      const cartDetails = await cartsService.getCartDetails(cartId);
 
-      if (!cartDetails) {
-          return res.status(404).json({ status: 'error', message: 'Carrito no encontrado' });
-      }
-      res.json({ status: 'success', data: cartDetails });
+router.get('/consultastock/:pid', passportCall('jwt'), authorization('user'), async (req, res) => {
+  try {
+    const { pid } = req.params; 
+    const { quantity } = req.query;
+    const result = await cartsService.checkProductStockInCart(pid, quantity);
+    if (result.success) {
+      res.status(HTTP_RESPONSES.OK).json({ status: 'success', productInCart: result.productInCart });
+    } else {
+      res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error',  productInCart: result.productInCart });
+    }
   } catch (error) {
-      res.status(500).json({ status: 'error', error: error.message });
+    req.logger.error(error);
+    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
   }
 });
 router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
@@ -103,6 +106,20 @@ router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
       .json({ status: 'error', error: error.message });
   }
 });
+router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (req, res) => {
+  try {
+      const cartId = req.params.cartId;
+      const cartDetails = await cartsService.getCartDetails(cartId);
+
+      if (!cartDetails) {
+          return res.status(404).json({ status: 'error', message: 'Carrito no encontrado' });
+      }
+      res.json({ status: 'success', data: cartDetails });
+  } catch (error) {
+      res.status(500).json({ status: 'error', error: error.message });
+  }
+});
+
 router.delete('/carts/:id',passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
@@ -193,20 +210,6 @@ router.post('/:cid/purchase', passportCall('jwt'), authorization('user'), async 
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
   }
 });
-router.get('/consultastock/:pid', passportCall('jwt'), authorization('user'), async (req, res) => {
-  try {
-    const { pid } = req.params; 
-    const { quantity } = req.query;
-    const result = await cartsService.checkProductStockInCart(pid, quantity);
-    if (result.success) {
-      res.status(HTTP_RESPONSES.OK).json({ status: 'success', productInCart: result.productInCart });
-    } else {
-      res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error',  productInCart: result.productInCart });
-    }
-  } catch (error) {
-    req.logger.error(error);
-    res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
-  }
-});
+
 
 module.exports = router;

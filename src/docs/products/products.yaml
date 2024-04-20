@@ -1,0 +1,236 @@
+openapi: '3.0.3'
+info:
+  title: API Products
+  version: "1.0"
+paths:
+  /api/products/:
+    get:
+      summary: Obtienes todos los productos
+      tags:
+        - products
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Filtrar productos por título
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filtrar productos por categoría
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Ordenar productos por precio (ascendente o descendente)
+
+      responses:
+        "200":
+          description: Todos los productos han sido obtenidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "500":
+          description: Error interno del servidor al obtener los  productos
+    post:
+      summary: Agrega un nuevo producto
+      tags:
+        - products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Titulo 
+        - in: query
+          name: code
+          schema:
+            type: string
+          description: Codigo
+        - in: query
+          name: price
+          schema:
+            type: number
+          description: Precio
+        - in: query
+          name: stock
+          schema:
+            type: integer
+          description: stock
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Categoría
+        - in: query
+          name: thumbnail
+          schema:
+            type: string
+          description: Imagen
+        - in: query
+          name: owner
+          schema:
+            type: string
+          description: Propietario
+      responses:
+        "201":
+          description: Equipo registrado exitosamente
+        "500":
+          description: Error interno del servidor
+  /api/products/{id}:
+    put:
+      summary: Actualiza un producto existente
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: Id de Mongo
+          description: ID del producto a actualizar (solo lectura)
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Titulo 
+        - in: query
+          name: code
+          schema:
+            type: string
+          description: Codigo
+        - in: query
+          name: price
+          schema:
+            type: number
+          description: Precio
+        - in: query
+          name: stock
+          schema:
+            type: integer
+          description: stock
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Categoría
+        - in: query
+          name: thumbnail
+          schema:
+            type: string
+          description: Imagen
+        - in: query
+          name: owner
+          schema:
+            type: string
+          description: Propietario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Producto actualizado exitosamente
+        "500":
+          description: Error interno del servidor
+        "400":
+          description: Producto no encontrado
+    delete:
+      summary: Elimina un producto existente
+      tags:
+        - products
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: Id Mongo DB
+          description: ID del producto a eliminar
+      responses:
+        "200":
+          description: Producto eliminado exitosamente
+        "400":
+          description: Producto no encontrado
+
+components:
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - title
+        - code
+        - price
+        - stock
+        - category
+      
+      properties:
+        id:
+          type: string
+          format: Id Mongo Db
+          description: ID único del producto
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        title:
+          type: string
+          description: Título del producto
+          example: "Laptop"
+        description:
+          type: string
+          description: Descripción del producto
+          example: "Potente laptop para uso profesional"
+        code:
+          type: string
+          description: Código único del producto
+          example: "LT-001"
+        price:
+          type: number
+          description: Precio del producto
+          example: 999.99
+        status:
+          type: boolean
+          description: Estado del producto (activo/inactivo)
+          default: true
+        stock:
+          type: number
+          description: Cantidad en stock del producto
+          example: 100
+        category:
+          type: string
+          description: Categoría del producto
+          example: "Electrónicos"
+        thumbnail:
+          type: string
+          description: URL de la imagen del producto
+          default: "img/equipo3.jpg"
+          example: "https://ejemplo.com/imagen.jpg"
+        owner:
+          type: string
+          description: Propietario del producto
+          default: "admin"
+        createdAt:
+          type: string
+          format: date-time
+          description: Fecha de creación del producto
+          example: "2024-04-19T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Fecha de última actualización del producto
+          example: "2024-04-19T13:30:00Z"
+
+

@@ -19,6 +19,8 @@ const app = express();
 const addLogger = require('./utils/winston/logger');
 const logger = require('./middleware/logger.middleware');
 const winstonLogger = require('./utils/winston/factory');
+const swaggerJSDoc =require('swagger-jsdoc')
+const swaggerUiExpress = require('swagger-ui-express')
 app.use(logger);
 
 app.use(express.json());
@@ -42,6 +44,21 @@ app.set('view engine', 'handlebars');
   })
 )*/
 mongoConnect()
+const swaggerOptions = {
+  definition:{
+    openapi:'3.0.3',
+    info:{
+      title:'Documentacion Sistema',
+      description:"Documentacion de la Aplicacón",
+      version: '1.0.0'
+    }
+  },
+  apis:[`${__dirname}/docs/**/*.yaml`]
+}
+const specs = swaggerJSDoc(swaggerOptions)
+app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+
+
 initializePassport()
 app.use(passport.initialize())
 //app.use(passport.session())

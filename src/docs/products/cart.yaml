@@ -1,0 +1,266 @@
+openapi: '3.0.3'
+info:
+  title: API de Carritos de Compras
+  version: "1.0"
+paths:
+  /api/productcatalog:
+    get:
+      summary: Obtener todos los productos en el catálogo
+      tags:
+        - carts
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+          description: Filtrar productos por título
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filtrar productos por categoría
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [asc, desc]
+          description: Ordenar productos por precio (ascendente o descendente)
+      responses:
+        "200":
+          description: Catálogo de productos obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+        "500":
+          description: Error interno del servidor al obtener el catálogo de productos
+    post:
+      summary: Agregar un nuevo carrito de compras
+      tags:
+        - carts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+                  description: ID del usuario asociado al carrito de compras
+                  example: "605e3148b31a611b9ef18d9a"
+                nombre:
+                  type: string
+                  description: Nombre del cliente
+                  example: "William Flores"
+                direccion:
+                  type: string
+                  description: Dirección de envío del cliente
+                  example: "Av. Principal 123"
+                email:
+                  type: string
+                  format: email
+                  description: Correo electrónico del cliente
+                  example: "william@example.com"
+                items:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Cart"
+      responses:
+        "201":
+          description: Carrito de compras creado exitosamente
+        "400":
+          description: No hay suficiente stock del producto para agregar al carrito
+        "500":
+          description: Error interno del servidor al agregar un nuevo carrito de compras
+
+  /api/consultastock/{id}:
+    get:
+      summary: Obtener el stock de un producto
+      tags:
+        - carts
+      parameters:
+        - in: path
+          name: id Mongo DB 
+          required: true
+          schema:
+            type: string
+          description: ID del producto del cual se desea consultar el stock
+      responses:
+        '200':
+          description: Stock del producto obtenido exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  stock:
+                    type: integer
+                    description: Cantidad disponible en stock del producto
+        '500':
+          description: Error interno del servidor
+
+  /api/listcarts/view:
+    get:
+      summary: Obtener todos los carritos de compras
+      tags:
+        - carts
+      parameters:
+        - in: query
+          name: desde
+          schema:
+            type: string
+            format: date-time
+          description: Fecha desde la cual se realizan consultas en los carritos
+        - in: query
+          name: hasta
+          schema:
+            type: string
+            format: date-time
+          description: Fecha hasta la cual se realizan consultas en los carritos
+      responses:
+        "200":
+          description: Lista de carritos de compras obtenida exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Cart"
+        "500":
+          description: Error interno del servidor al obtener los carritos de compras
+
+  /api/details/{id}:
+    get:
+      summary: Obtener detalles de un carrito de compras por ID
+      tags:
+        - carts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: Id de Mongo DB
+          description: ID del carrito de compras a obtener
+      responses:
+        "200":
+          description: Detalles del carrito de compras obtenidos exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cart"
+        "404":
+          description: Carrito de compras no encontrado
+        "500":
+          description: Error interno del servidor al obtener los detalles del carrito de compras
+    put:
+      summary: Actualizar un carrito de compras existente por ID
+      tags:
+        - carts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: Id de Mongo DB
+          description: ID del carrito de compras a actualizar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Cart"
+      responses:
+        "200":
+          description: Carrito de compras actualizado exitosamente
+        "404":
+          description: Carrito de compras no encontrado
+        "500":
+          description: Error interno del servidor al actualizar el carrito de compras
+    delete:
+      summary: Eliminar un carrito de compras existente por ID
+      tags:
+        - carts
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: Id de Mongo DB
+          description: ID del carrito de compras a eliminar
+      responses:
+        "200":
+          description: Carrito de compras eliminado exitosamente
+        "404":
+          description: Carrito de compras no encontrado
+        "500":
+          description: Error interno del servidor al eliminar el carrito de compras
+
+components:
+  schemas:
+    Cart:
+      type: object
+      required:
+        - id
+        - userId
+        - nombre
+        - direccion
+        - email
+        - items
+      properties:
+        id:
+          type: string
+          description: ID único del carrito de compras
+          example: "60f6b3e354d6f67b7a78c223"
+        userId:
+          type: string
+          description: ID del usuario asociado al carrito de compras
+          example: "605e3148b31a611b9ef18d9a"
+        nombre:
+          type: string
+          description: Nombre del cliente
+          example: "William Flores"
+        direccion:
+          type: string
+          description: Dirección de envío del cliente
+          example: "Av. Principal 123"
+        email:
+          type: string
+          format: email
+          description: Correo electrónico del cliente
+          example: "william@example.com"
+        items:
+          type: array
+          description: Lista de ítems en el carrito de compras
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: ID del producto en el carrito
+                example: "610d7fe1ab40f400157f46fc"
+              quantity:
+                type: integer
+                description: Cantidad del producto en el carrito
+                example: 2
+        totalPrice:
+          type: number
+          description: Precio total del carrito de compras
+          example: 2499.99
+        createdAt:
+          type: string
+          format: date-time
+          description: Fecha de creación del carrito de compras
+          example: "2022-07-20T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Fecha de última actualización del carrito de compras
+          example: "2022-07-20T13:30:00Z"
+
+
