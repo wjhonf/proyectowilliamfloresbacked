@@ -206,7 +206,6 @@ describe("Testing Sistema de ventas", () => {
     });
 });
 
-
 describe("Testing Sistema de ventas", () => {
     describe("Test de la ruta DELETE /carts/:id", () => {
         it("Eliminar un carrito correctamente", async () => {
@@ -214,6 +213,7 @@ describe("Testing Sistema de ventas", () => {
             const cartId = "662861675b249c5b53779502"; 
             const response = await requester.delete(`/listcarts/carts/${cartId}`);
             expect(response.body).to.have.property("status");
+            console.log(response.body);
             console.log(response.body);
         });
     });
