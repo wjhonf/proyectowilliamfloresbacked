@@ -9,7 +9,6 @@ const CustomError = require('../handlers/errors/Custom-Error')
 const generateUserErrorInfo = require('../handlers/errors/generate-user-error-info')
 const EErrors = require('../handlers/errors/emun-errors')
 const TYPES_ERRORS = require('../handlers/errors/types.errors')
-
 const router = Router();
 
 router.post('/login', async (req, res) => {

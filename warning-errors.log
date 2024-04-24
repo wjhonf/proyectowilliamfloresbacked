@@ -51,3 +51,16 @@ error: undefined {"code":"ERR_HTTP_INVALID_STATUS_CODE"}
 error: undefined
 error: undefined
 error: undefined
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined {"code":11000,"index":0,"keyPattern":{"code":1},"keyValue":{"code":"LTNVO-THNKPD-X1C"}}
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"_message":"Ticket validation failed","errors":{"amount":{"kind":"required","message":"Path `amount` is required.","name":"ValidatorError","path":"amount","properties":{"message":"Path `amount` is required.","path":"amount","type":"required"}}}}

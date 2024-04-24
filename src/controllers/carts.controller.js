@@ -37,7 +37,7 @@ router.get('/', passportCall('jwt'),authorization('user'),isUser, async (req, re
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-router.get('/view', passportCall('jwt'),authorization('user'), isAdmin, async (req, res) => {
+router.get('/view', /*passportCall('jwt'),authorization('user'), isAdmin,*/ async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await cartsService.getAll(params);
@@ -76,7 +76,7 @@ router.get('/consultastock/:pid', passportCall('jwt'), authorization('user'), as
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: error.message });
   }
 });
-router.post('/',passportCall('jwt'),authorization('user'), async (req, res) => {
+router.post('/'/*,passportCall('jwt'),authorization('user')*/, async (req, res) => {
   try {
     req.logger.info(req.body)
     const { userId, nombre, direccion, email, items, totalPrice } = req.body;
@@ -120,7 +120,7 @@ router.get('/details/:cartId',passportCall('jwt'),authorization('user'), async (
   }
 });
 
-router.delete('/carts/:id',passportCall('jwt'),authorization('user'), async (req, res) => {
+router.delete('/carts/:id' /*,passportCall('jwt'),authorization('user')*/, async (req, res) => {
   try {
     const { id } = req.params;
     await cartsService.deleteCart(id);

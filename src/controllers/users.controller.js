@@ -48,6 +48,7 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error })
   }
 })
+
 router.post(
   '/',
   passport.authenticate('register', {
@@ -62,7 +63,7 @@ router.post(
       res.cookie('authToken', token, {
         maxAge: 30000,
         httpOnly: true,
-      }).json({ status: 'Success', payload: 'Logged in' });
+      }).json({ status: 'success', payload: 'Logged in' });
     } catch (error) {
       req.logger.error(error);
       res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
