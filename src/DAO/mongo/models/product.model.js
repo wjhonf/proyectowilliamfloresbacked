@@ -32,7 +32,6 @@ const productSchema = new mongoose.Schema({
   },
   thumbnail: {
     type: String,
-    default: "img/equipo3.jpg"
   },
   owner: {
     type: String,

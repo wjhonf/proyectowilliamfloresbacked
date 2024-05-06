@@ -3,7 +3,7 @@ const authMiddleware = require('../middleware/auth.middleware')
 const {authToken}= require('../utils/jwt.util')
 const passport = require('passport')
 const passportCall = require('../utils/passport-call.util')
-const User = require('../DAO/mongo/models/user.model');
+const login = require('../DAO/mongo/models/user.model');
 const authorization = require('../middleware/authorization.middleware')
 const router = Router()
 
@@ -45,7 +45,16 @@ router.get('/signup', (req, res) => {
 })
 
 router.get('/profile', passportCall('jwt'), authorization('user'), async (req, res) => {
-  const user = req.user;
+  const iduser = req.user.id;
+  const datauser = await login.findById(iduser);
+  user ={ id: datauser._id, 
+    first_name: datauser.first_name,
+    last_name: datauser.last_name, 
+    email: datauser.email, 
+    role: datauser.role, 
+    documents: datauser.documents, 
+    profileImage:datauser.profileImage
+  }
   res.render('profile', {user})
 })
 router.get('/send-email', (req, res) => {

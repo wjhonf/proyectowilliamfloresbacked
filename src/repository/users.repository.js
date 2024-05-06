@@ -14,6 +14,9 @@ class UsersRepository {
   async findOne(query) {
     return await this.dao.findOne(query);
   }
+  async updatedatos(user) {
+    await user.save();
+  }
 }
 
 module.exports = UsersRepository;

@@ -64,3 +64,91 @@ error: undefined
 error: undefined
 error: undefined
 error: undefined {"_message":"Ticket validation failed","errors":{"amount":{"kind":"required","message":"Path `amount` is required.","name":"ValidatorError","path":"amount","properties":{"message":"Path `amount` is required.","path":"amount","type":"required"}}}}
+error: undefined {"_message":"user validation failed","errors":{"last_connection":{"kind":"date","message":"Cast to date failed for value \"28/4/2024, 19:04:58\" (type string) at path \"last_connection\"","name":"CastError","path":"last_connection","reason":{"actual":false,"code":"ERR_ASSERTION","expected":true,"generatedMessage":true,"operator":"=="},"stringValue":"\"28/4/2024, 19:04:58\"","value":"28/4/2024, 19:04:58","valueType":"string"}}}
+error: undefined {"_message":"user validation failed","errors":{"last_connection":{"kind":"date","message":"Cast to date failed for value \"28/4/2024, 14:07:32\" (type string) at path \"last_connection\"","name":"CastError","path":"last_connection","reason":{"actual":false,"code":"ERR_ASSERTION","expected":true,"generatedMessage":true,"operator":"=="},"stringValue":"\"28/4/2024, 14:07:32\"","value":"28/4/2024, 14:07:32","valueType":"string"}}}
+error: undefined {"_message":"user validation failed","errors":{"last_connection":{"kind":"date","message":"Cast to date failed for value \"28/4/2024, 14:08:31\" (type string) at path \"last_connection\"","name":"CastError","path":"last_connection","reason":{"actual":false,"code":"ERR_ASSERTION","expected":true,"generatedMessage":true,"operator":"=="},"stringValue":"\"28/4/2024, 14:08:31\"","value":"28/4/2024, 14:08:31","valueType":"string"}}}
+error: undefined {"_message":"user validation failed","errors":{"last_connection":{"kind":"date","message":"Cast to date failed for value \"28/4/2024, 14:15:01\" (type string) at path \"last_connection\"","name":"CastError","path":"last_connection","reason":{"actual":false,"code":"ERR_ASSERTION","expected":true,"generatedMessage":true,"operator":"=="},"stringValue":"\"28/4/2024, 14:15:01\"","value":"28/4/2024, 14:15:01","valueType":"string"}}}
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"undefined_imgproduct_imgprueba.jpg\"","value":"undefined_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"undefined_imgproduct_imgprueba.jpg\"","value":"undefined_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"efb09dde-68a1-4bdf-bf9f-a9a3400a7e94_imgproduct_imgprueba\"","value":"efb09dde-68a1-4bdf-bf9f-a9a3400a7e94_imgproduct_imgprueba","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"efb09dde-68a1-4bdf-bf9f-a9a3400a7e94_imgproduct_imgprueba.png\"","value":"efb09dde-68a1-4bdf-bf9f-a9a3400a7e94_imgproduct_imgprueba.png","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg\"","value":"1112d088-1ee4-4f5a-80f7-1abc7080e5ec_imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"deleteimg\"","value":"deleteimg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_COMITÃ\\x89 DEL CSST 2023-2025_IAP (1).png\"","value":"imgproduct_COMITÃ DEL CSST 2023-2025_IAP (1).png","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_COMITÃ\\x89 DEL CSST 2023-2025_IAP (1).png\"","value":"imgproduct_COMITÃ DEL CSST 2023-2025_IAP (1).png","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_imgprueba.jpg\"","value":"imgproduct_imgprueba.jpg","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"imgproduct_Proyecto nuevo.png\"","value":"imgproduct_Proyecto nuevo.png","valueType":"string"}
+error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}
+error: undefined {"kind":"ObjectId","path":"_id","reason":{},"stringValue":"\"null\"","value":"null","valueType":"string"}

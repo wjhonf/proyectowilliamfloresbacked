@@ -15,6 +15,7 @@ const router = (app, io) => {
   app.use('/auth', authControlller);
   app.use('/auth/auth', authControlller);
   app.use('/listcarts/auth', authControlller)
+  app.use('/products/auth', authControlller)
   app.use('/products', productscontrollers);
   app.use('/messages', messagecontroller);
   app.use('/productcatalog', cartcontroller);

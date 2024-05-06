@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
   facebookId: Number,
   resetPasswordToken: String, 
   resetPasswordExpires: Date,
+  profileImage: String,
+  documents: [
+    {
+      name: String,
+      reference: String,
+    }
+  ],
+  last_connection: Date,
 })
 const Users = mongoose.model(userCollection, userSchema)
 

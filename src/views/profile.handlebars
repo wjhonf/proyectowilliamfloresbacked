@@ -1,25 +1,272 @@
 <div class="container mt-5">
-  <div class="card">
-    <div class="card-body">
-      <h2 class="card-title text-center">Perfil</h2>
-      <div class="form-group">
-        <label>Nombre</label>
-        <p class="form-control">{{user.first_name}}</p>
-      </div>
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title text-center">Mi Perfil</h5>
+          <div class="text-center">
+            <div class="position-relative d-inline-block" style="width: 150px; height: 150px;">
+               {{#if user.profileImage}}
+                <img id="fotoPerfil" src="{{user.profileImage}}" alt="Foto de perfil" class="rounded-circle img-fluid" style="width: 100%; height: 100%;">
+               {{else}}
+                <img id="fotoPerfil" src="" alt="Foto de perfil" class="rounded-circle img-fluid" style="width: 100%; height: 100%; display: none;">
+                  <div id="fotoPlaceholder" class="position-absolute top-0 start-0 rounded-circle" style="width: 100%; height: 100%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center;">
+                    <span style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">Sin Foto</span>
+                  </div>
+               {{/if}}
+            </div>
+          </div>
+          <div class="text-center mt-3" id="btnsubir">
+            <label for="inputFoto" class="btn btn-warning btn-sm">
+              <i class="bi bi-camera"></i> <span>Foto</span>
+            </label>
+            <input id="inputFoto" type="file" style="display: none;" onchange="mostrarFoto(this)">
+          </div>
+           <div class="text-center mt-3" id="btneliminar" style="display: none;">
+           <button class="btn btn-danger btn-sm mt-2" onclick="eliminarFoto()" id="botonEliminarFoto">
+              <i class="bi bi-trash"></i><span>Foto</span>
+            </button>
+           </div>
+          <div class="row mt-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Nombres</label>
+                <p class="form-control">{{user.first_name}}</p>
+              </div>
+              <div class="form-group">
+                <label>Correo</label>
+                <p class="form-control">{{user.email}}</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Apellidos</label>
+                <p class="form-control">{{user.last_name}}</p>
+              </div>
+              <div class="form-group">
+                <label>Rol</label>
+                <p class="form-control">{{user.role}}</p>
+              </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                  <div class="card-body">
+                    {{#if user.documents}}
+                    <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                      <div>
+                        Documentación cargada correctamente de usuario.
+                      </div>
+                    </div>
+                    {{else}}
+                      <h6 class="card-title text-center">Adjuntar Documentos</h6>
+                      <form onsubmit="enviarArchivosAlServidor(); return false;">
+                        <div class="mb-3">
+                          <label for="tipoArchivo" class="form-label">Tipo Documento</label>
+                          <select class="form-select" id="tipoArchivo">
+                          <option value="" selected>Seleccionar Tipo Documento</option>
+                          <option value="Doc_Identificacion">Documento Identidad</option>
+                          <option value="ComprobanteDomicilio">Comprobante de domicilio</option>
+                          <option value="ComprobanteEstadoCuenta">Comprobante de estado de cuenta</option>
+                        </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="inputArchivo" class="btn btn-primary">
+                          <i class="bi bi-upload"></i> Seleccionar Archivo
+                          </label>
+                          <input type="file" class="form-control" id="inputArchivo" multiple style="display: none;" onchange="renombrarYMostrarArchivos()">
 
-      <div class="form-group">
-        <label>Apellido</label>
-        <p class="form-control">{{user.last_name}}</p>
-      </div>
-
-      <div class="form-group">
-        <label>Correo</label>
-        <p class="form-control">{{user.email}}</p>
-      </div>
-      
-      <div class="text-center">
-         <a  class="btn btn-success" href="/home">Atras</a>
+                        </div>
+                        <div id="listaArchivos" class="mb-3"></div>
+                      </form>
+                    {{/if}}
+                    
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="text-center mt-4">
+            {{#if user.documents}}
+             <a  class="btn btn-success" href="/home">Atrás</a>
+            {{else}}
+            <a  class="btn btn-success" id="btnAtras" href="/home">Atrás</a>
+            <button type="button" class="btn btn-warning" onclick="actualizar()">Actualizar - Usuario</button>
+            {{/if}}
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  function ocultarBotonSubir() {
+        const fotoPerfil = document.getElementById('fotoPerfil');
+        const btnsubir = document.getElementById('btnsubir');
+
+        if (fotoPerfil.getAttribute('src') !== '') {
+            btnsubir.style.display = 'none';
+        } else {
+            btnsubir.style.display = 'block';
+        }
+    }
+  document.addEventListener('DOMContentLoaded', ocultarBotonSubir);
+  function mostrarFoto(input) {
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+    
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileName = file.name;
+
+        if (!allowedExtensions.exec(fileName)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sitema de Ventas',
+                text: 'Por favor, selecciona un archivo JPG o PNG.',
+            });
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('fotoPerfil').src = e.target.result;
+            document.getElementById('fotoPerfil').style.display = 'block';
+            document.getElementById('fotoPlaceholder').style.display = 'none';
+            document.getElementById('btnsubir').style.display = 'none';
+            document.getElementById('btneliminar').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+  }
+  function eliminarFoto() {
+    document.getElementById('fotoPerfil').src = '';
+    document.getElementById('fotoPerfil').style.display = 'none';
+    document.getElementById('inputFoto').value = '';
+    document.getElementById('fotoPlaceholder').style.display = 'block';
+    document.getElementById('btnsubir').style.display = 'block';
+    document.getElementById('btneliminar').style.display = 'none';
+  }
+  
+let tiposDocumentosSeleccionados = [];
+let archivosGuardados = JSON.parse(localStorage.getItem('archivosGuardados')) || {};
+function renombrarYMostrarArchivos() {
+    let archivos = document.getElementById("inputArchivo").files;
+    let select = document.getElementById("tipoArchivo");
+    let listaArchivos = document.getElementById("listaArchivos");
+    let tipoDocumentoSeleccionado = select.value;
+    if (!tipoDocumentoSeleccionado) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Sistema de Ventas',
+            text: 'Por favor, seleccione un tipo de documento.',
+        });
+        document.getElementById("inputArchivo").value = "";
+        return;
+    }
+    for (let i = 0; i < archivos.length; i++) {
+        let archivo = archivos[i];
+        let nombreArchivo = archivo.name;
+        let extension = nombreArchivo.split('.').pop().toLowerCase(); 
+        if (extension !== 'pdf') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sistema de Ventas',
+                text: 'Por favor, seleccione solo archivos PDF.',
+            });
+            continue; 
+        }
+        let nombreRenombrado = tipoDocumentoSeleccionado + '.' + extension; 
+        if (archivosGuardados[nombreRenombrado]) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sistema de Ventas',
+                text: 'Ya se ha seleccionado un archivo con el mismo nombre.',
+            });
+            continue;
+        }
+        archivosGuardados[nombreRenombrado] = archivo;
+        localStorage.setItem('archivosGuardados', JSON.stringify(archivosGuardados));
+        let divArchivo = document.createElement("div");
+        divArchivo.classList.add("d-flex", "justify-content-between", "align-items-center", "border", "p-2", "mb-2");
+        let pNombreArchivo = document.createElement("p");
+        pNombreArchivo.classList.add("m-0");
+        pNombreArchivo.textContent = nombreRenombrado;
+        let btnEliminar = document.createElement("button");
+        btnEliminar.classList.add("btn", "btn-danger", "btn-sm");
+        btnEliminar.innerHTML = '<i class="bi bi-trash"></i>'; 
+        btnEliminar.onclick = function() {
+            divArchivo.remove();
+            eliminarArchivoDeLocalStorage(nombreRenombrado);
+        };
+        divArchivo.appendChild(pNombreArchivo);
+        divArchivo.appendChild(btnEliminar);
+        listaArchivos.appendChild(divArchivo);
+    }
+    document.getElementById("inputArchivo").value = "";
+}
+
+function eliminarArchivoDeLocalStorage(nombreArchivo) {
+    delete archivosGuardados[nombreArchivo];
+    localStorage.setItem('archivosGuardados', JSON.stringify(archivosGuardados));
+    localStorage.removeItem(nombreArchivo);
+}
+function eliminarArchivoDeLocalStorage(nombreArchivo) {
+    delete archivosGuardados[nombreArchivo];
+    localStorage.setItem('archivosGuardados', JSON.stringify(archivosGuardados));
+}
+function actualizar() {
+  if (!document.getElementById('fotoPerfil').src || document.getElementById('listaArchivos').childElementCount !== 3) {
+    Swal.fire({
+        icon: 'error',
+        title: '¡Actualización a Premium!',
+        text: 'Por favor, carga tu foto de perfil y tres archivos antes de actualizar a Premium.',
+    });
+    return;
+  }
+  const fotoPerfil = document.getElementById('inputFoto').files[0];
+  enviarArchivosAlServidor(fotoPerfil);
+}
+function enviarArchivosAlServidor(fotoPerfil) {
+  const userId = document.getElementById('iduser').value;
+  const nombresArchivos  = JSON.parse(localStorage.getItem('archivosGuardados')) || {};
+  const formData = new FormData();
+  if (fotoPerfil) {
+    formData.append('profileImage', fotoPerfil);
+  }
+  for (const nombreArchivo in archivosGuardados) {
+    const archivoInfo = archivosGuardados[nombreArchivo];
+    const archivo = new Blob([archivoInfo], { type: 'application/pdf' }); 
+    formData.append('documents', archivo, nombreArchivo);
+  }
+  fetch('/users/' + userId + '/documents', {
+    method: 'POST',
+    body: formData,
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Error al enviar los datos del perfil');
+    }
+    return response.json();
+  })
+  .then(data => {
+     Swal.fire({
+          icon: 'success',
+          title: '¡Éxito!',
+          text: 'Datos del perfil actualizados correctamente',
+          showCancelButton: false,
+          confirmButtonText: 'Ok',
+    });
+    localStorage.clear();
+    window.location.href = '/profile';
+  })
+  .catch(error => {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: 'No se pudieron enviar los datos del perfil',
+    });
+  });
+}
+document.getElementById('btnAtras').addEventListener('click', function(event) {
+    localStorage.clear();
+});
+</script>

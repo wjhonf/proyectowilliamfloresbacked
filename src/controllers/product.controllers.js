@@ -9,9 +9,10 @@ const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
 const { generateProducts } = require('../utils/equipos-mock.util');
 const fs = require('fs');
 const path = require('path');
+const upload = require('../utils/multer');
 const router = Router();
 
-router.get('/'/*,  passportCall('jwt'),authorization('user'),isAdmin*/, async (req, res) => {
+router.get('/',  passportCall('jwt'),authorization('user'),isAdmin, async (req, res) => {
   try {
     const params = { ...req.query };
     const response = await productsService.getAll(params);
@@ -33,14 +34,18 @@ router.get('/'/*,  passportCall('jwt'),authorization('user'),isAdmin*/, async (r
     });
 
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
 
-router.post('/'/*, passportCall('jwt'),authorization('user'),isAdmin*/, async (req, res) => {
+router.post('/', passportCall('jwt'),authorization('user'),isAdmin, upload.fields([
+  { name: 'thumbnail', maxCount: 1 }
+]), async (req, res) => {
   try {
-    const { title, description, code, price, stock, category, thumbnail, owner} = req.body;
+    const imgproduct = req.files['thumbnail'] ? req.files['thumbnail'][0].filename : null;
+    const thumbnail= "../products/"+imgproduct
+    const { title, description, code, price, stock, category, owner} = req.body;
     const productOwner = owner ? owner : 'admin';
     if (!title || !code || !price || !stock) {
       return res
@@ -59,8 +64,8 @@ router.post('/'/*, passportCall('jwt'),authorization('user'),isAdmin*/, async (r
       createdAt: new Date(),
       updatedAt: new Date(),
     };
-    
     const newProduct = await productsService.insertOne(newProductInfo);
+    const productId = newProduct._id;
     res
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: newProduct});
@@ -72,10 +77,14 @@ router.post('/'/*, passportCall('jwt'),authorization('user'),isAdmin*/, async (r
       .json({ status: 'error', error });
   }
 });
-router.put('/:id'/*, passportCall('jwt'),authorization('user'),isAdmin*/, async (req, res) => {
+router.put('/:id', passportCall('jwt'),authorization('user'),isAdmin, upload.fields([
+  { name: 'thumbnail', maxCount: 1 }
+]), async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, code, price, stock, category, thumbnail, owner } = req.body;
+    const imgproduct = req.files['thumbnail'] ? req.files['thumbnail'][0].filename : null;
+    const thumbnail = "../products/" + imgproduct;
+    const { title, description, code, price, stock, category, owner } = req.body;
     const productOwner = owner ? owner : 'admin';
     if (!title || !code || !price || !stock) {
       return res
@@ -89,54 +98,68 @@ router.put('/:id'/*, passportCall('jwt'),authorization('user'),isAdmin*/, async 
       price,
       stock,
       category,
-      thumbnail,
       owner: productOwner,
       updatedAt: new Date(),
     };
-
+    if (imgproduct !== null) {
+      updatedProductInfo.thumbnail = thumbnail;
+    }
     await Product.updateOne({ _id: id }, updatedProductInfo);
 
     res
       .status(HTTP_RESPONSES.OK)
       .json({ status: 'success', payload: updatedProductInfo });
   } catch (error) {
-   console.log(error);
+    req.logger.error(error);
     res
       .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
       .json({ status: 'error', error });
   }
 });
 
-router.delete('/:id',/*passportCall('jwt'), authorization('user'),*/ async (req, res) => {
+router.delete('/:id',passportCall('jwt'), authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(req.params)
     const product = await productsService.getProductById(id);
+    const dataimg = await Product.findById(id);
+    const rutaimg = {
+      thumbnail: dataimg.thumbnail,
+    };
+    const rutaprincipal= rutaimg.thumbnail
+    const rutaSinDots = rutaprincipal.replace(/^(\.\.\/)+/, ''); 
+    const imagePath = path.join(__dirname, '..', 'public', rutaSinDots);
     if (!product) {
       return res.status(HTTP_RESPONSES.NOT_FOUND).json({ status: 'error', message: 'Producto no encontrado' });
     }
     if(id !="" && req.user== undefined)
     {
+       if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+       } 
        await productsService.deleteProductById(id);
        return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
     }else{
     if (req.user.role === 'admin') {
+      if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+      } 
       await productsService.deleteProductById(id);
       return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
     }
     if (req.user.role === 'premium' && (!product.owner || product.owner.toString() === req.user.id.toString())) {
+      if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+      } 
       await productsService.deleteProductById(id);
       return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
     } else {
       return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', message: 'No tienes permisos para eliminar este producto' });
     }}
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     return res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-
-
 router.get('/:id', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const { id } = req.params;
@@ -147,7 +170,6 @@ router.get('/:id', passportCall('jwt'),authorization('user'), async (req, res) =
         .status(HTTP_RESPONSES.NOT_FOUND)
         .json({ status: 'error', error: 'Product not found' });
     }
-     
     res.json({ status: 'success', payload: product });
   } catch (error) {
     req.logger.error(error);
@@ -172,6 +194,24 @@ router.get('/details/:cartId', passportCall('jwt'),authorization('user'), async 
          .json({ status: 'error', error: error.message });
   }
 });
+
+router.post('/deleteimg', passportCall('jwt'), authorization('user'), isAdmin, async (req, res) => {
+  try {
+      const { rutaimg } = req.body;
+      const rutaSinDots = rutaimg.replace(/^(\.\.\/)+/, ''); 
+      const imagePath = path.join(__dirname,'..', 'public', rutaSinDots);
+      if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+          res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Image deleted successfully' });
+      } else {
+          res.status(HTTP_RESPONSES.NOT_FOUND).json({ status: 'error', message: 'Image not found' });
+      }
+  } catch (error) {
+      req.logger.error(error);
+      res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
+
 /*
 
 router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {

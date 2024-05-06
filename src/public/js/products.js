@@ -10,23 +10,32 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 document.getElementById("guardarequipo").addEventListener("click", function(event) {
+const inputFotop = document.getElementById('inputFotop');
+if (!inputFotop.files || !inputFotop.files[0]) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Sisema de Ventas',
+      text: 'Por favor, selecciona una imagen para el producto.'
+    });
+    event.preventDefault(); 
+    return;
+  }
+  const fotoproduct = inputFotop.files[0];
   event.preventDefault();
-  const formData = {
-    title: document.getElementById("title").value,
-    code: document.getElementById("code").value,
-    price: document.getElementById("price").value,
-    stock: document.getElementById("stock").value,
-    category: document.getElementById("category").value,
-    thumbnail: document.getElementById("thumbnail").value,
-    description: document.getElementById("description").value,
-    owner:owner
-  };
+  const formData = new FormData();
+  formData.append('title', document.getElementById("title").value);
+  formData.append('code', document.getElementById("code").value);
+  formData.append('price', document.getElementById("price").value);
+  formData.append('stock', document.getElementById("stock").value);
+  formData.append('category', document.getElementById("category").value);
+  formData.append('description', document.getElementById("description").value);
+  formData.append('owner', owner);
+  if (fotoproduct) {
+    formData.append('thumbnail', fotoproduct);
+  }
   fetch("/products", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(formData)
+    body: formData
   })
   .then(response => response.json())
   .then(data => {
@@ -46,7 +55,6 @@ document.getElementById("guardarequipo").addEventListener("click", function(even
     }
   })
   .catch(error => {
-    console.error("Error:", error);
     Swal.fire({
       icon: "error",
       title: "Error al enviar la solicitud",
@@ -54,7 +62,6 @@ document.getElementById("guardarequipo").addEventListener("click", function(even
     });
   });
 });
-
 document.getElementById('searchButton').addEventListener('click', function() {
   const searchInput = document.getElementById('search').value;
   const categorySelect = document.getElementById('categorySelect').value;
@@ -101,7 +108,7 @@ function deleteProduct() {
       window.location.href = '/products'; 
     })
     .catch(error => {
-      console.error('Error al eliminar el producto:', error.message);
+
       $('#deleteModal').modal('hide');
       Swal.fire({
         toast: true,
@@ -134,6 +141,7 @@ function loadProductData(productId) {
     success: function (response) {
       if (response.status === 'success') {
         const product = response.payload;
+        
         $('#editModal').on('hidden.bs.modal', function () {
           $('#id').val('');
           $('#editTitle').val('');
@@ -141,19 +149,25 @@ function loadProductData(productId) {
           $('#editPrice').val('');
           $('#editStock').val('');
           $('#editCategory').val('');
-          $('#editThumbnail').val('');
+          $('#editfotoproduct').attr('src', '');
+          $('#editfotoproduct').css('display', 'none');
           $('#editDescription').val('');
           $('#propietario').prop('checked', false);
         });
+        $('#sinfotoproduct').css('display', 'none');
+        $('#subirfotoproduct').css('display', 'none');
+        $('#elimfotoproduct').css('display', 'block');
+        let thumbnailUrl = product.thumbnail;
         $('#id').val(product._id);
         $('#editTitle').val(product.title);
         $('#editCode').val(product.code);
         $('#editPrice').val(product.price);
         $('#editStock').val(product.stock);
         $('#editCategory').val(product.category);
-        $('#editThumbnail').val(product.thumbnail);
+        $('#editfotoproduct').attr('src', thumbnailUrl);
+        $('#editfotoproduct').css('display', 'block');
         $('#editDescription').val(product.description);
-        var checkbox = document.getElementById("editpropietario");
+        let checkbox = document.getElementById("editpropietario");
         if (product.owner !== 'admin') {
             checkbox.checked = true; 
         }
@@ -190,30 +204,31 @@ function loadProductData(productId) {
 function saveProductChanges() {
   let productId = $('#id').val();
   let owner =""
-  var checkbox = document.getElementById("editpropietario");
+  const imgedit = document.getElementById('editfotoproduto');
+  let checkbox = document.getElementById("editpropietario");
   if (checkbox.checked) {
     owner =document.getElementById("iduser").value
   } else {
     owner=''  
   }
-  var updatedProductData = {
-    title: $('#editTitle').val(),
-    code: $('#editCode').val(),
-    price: $('#editPrice').val(),
-    stock: $('#editStock').val(),
-    category: $('#editCategory').val(),
-    thumbnail: $('#editThumbnail').val(),
-    description: $('#editDescription').val(),
-    owner:owner,
-    
-  };
+  const formData = new FormData();
+  formData.append('title', $('#editTitle').val());
+  formData.append('code', $('#editCode').val());
+  formData.append('price', $('#editPrice').val());
+  formData.append('stock', $('#editStock').val());
+  formData.append('category', $('#editCategory').val());
+  formData.append('description', $('#editDescription').val());
+  formData.append('owner', owner);
+  const thumbnailFile = imgedit.files[0];
+  formData.append('thumbnail', thumbnailFile);
   $.ajax({
     url: `/products/${productId}`,
     type: 'PUT',
-    contentType: 'application/json',
-    data: JSON.stringify(updatedProductData),
+    data: formData, 
+    processData: false, 
+    contentType: false, 
     success: function (response) {
-      if (response.status === 'success') {
+    if (response.status === 'success') {
          Swal.fire({
           toast: true,
           icon: 'info',
@@ -223,9 +238,9 @@ function saveProductChanges() {
           showConfirmButton: false,
           timer: 700000,
           timerProgressBar: true,
-          })
-        $('#editModal').modal('hide');
-        window.location.href = '/products';
+      })
+       $('#editModal').modal('hide');
+      window.location.href = '/products';
       } else {
         Swal.fire({
           toast: true,

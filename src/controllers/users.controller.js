@@ -10,8 +10,9 @@ const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
 const { email } = require('../configs/app.config')
 const transport = require('../utils/nademailer.util')
+const multer = require('multer');
+const upload = require('../utils/multer');
 const router = Router()
-
 router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
   try {
     const users = await usersService.getUsers();
@@ -27,6 +28,25 @@ router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
     res.render('list-users', { users: formattedUsers, user: req.user, });
   } catch (error) {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
+  }
+});
+router.post('/:uid/documents', upload.fields([
+  { name: 'profileImage', maxCount: 1 }, 
+  { name: 'documents', maxCount: 3 } 
+]), async (req, res) => {
+  try {
+    const userId = req.params.uid;
+    const profileImage = req.files['profileImage'] ? req.files['profileImage'][0].filename : null;
+    const documents = req.files['documents'] ? req.files['documents'].map(file => file.filename) : null;
+    const updateData = {
+      profileImage: profileImage,
+      documents: documents
+    };
+    const result = await usersService.updateUserProfile(userId, updateData);
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: 'error', error: 'Error al subir archivos' });
   }
 });
 router.put('/premium/:uid', async (req, res) => {
@@ -131,8 +151,4 @@ router.get('/current', async (req, res) => {
     res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
   }
 });
-
-
-
-
 module.exports = router

@@ -73,7 +73,6 @@
        </div>
 <nav aria-label="Pagination">
   <ul class="pagination justify-content-center">
-
     {{#if pagination.hasPrevPage}}
       <li class="page-item">
         <a class="page-link" href="/products?page={{pagination.prevPage}}" aria-label="Anterior">
@@ -101,7 +100,6 @@
         <span class="page-link" aria-hidden="true">Siguiente</span>
       </li>
     {{/if}}
-
   </ul>
 </nav>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -113,6 +111,30 @@
       </div>
       <div class="modal-body">
         <form method="POST" action="/products">
+         <div class="row mb-12">
+         <div class="text-center">  
+           <div class="position-relative d-inline-block" style="width: 150px; height: 150px;">
+            <img id="fotoproduct" src="" alt="Foto de Producto" class="rounded-circle img-fluid" style="width: 100%; height: 100%; display: none;">
+                  <div id="fotoPlaceholder" class="position-absolute top-0 start-0 rounded-circle" style="width: 100%; height: 100%; background-color: #f0f0f0; display: flex; justify-content: center; align-items: center;">
+                    <span style="width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">Sin Foto</span>
+                  </div>
+           </div>
+         </div>
+         </div>
+
+         <div class="text-center mt-3" id="btnsubirp">
+            <label for="inputFotop" class="btn btn-warning btn-sm">
+              <i class="bi bi-camera"></i> <span>Subit Foto - Producto( .PNG, .JPG)</span>
+            </label>
+            <input id="inputFotop" type="file" style="display: none;" onchange="mostrarFoto(this)">
+          </div>
+           <div class="text-center mt-3" id="btneliminarp" style="display: none;">
+           <button class="btn btn-danger btn-sm mt-2" onclick="eliminarFoto()" id="botonEliminarFoto">
+              <i class="bi bi-trash"></i><span>Foto</span>
+            </button>
+           </div>
+
+
           <div class="row mb-3">
             <div class="col">
               <label for="title" class="col-form-label">Título:</label>
@@ -146,20 +168,14 @@
                   <option value="Equipos de Red">Equipos de Red</option>
               </select>
             </div>
-            <div class="col">
-              <label for="thumbnail" class="col-form-label">Ruta Imagen Rf:</label>
-              <input type="text" class="form-control" id="thumbnail" name="thumbnail" value="../img/equipo6.jpg" required>
-            </div>
+            <div class="col"><br>
+                <input type="checkbox" class="form-check-input" id="propietario" name="propietario">
+                <label class="form-check-label" for="propietario">¿Eres el propietario?</label>
           </div>
-
+          </div>
           <div class="mb-3">
             <label for="description" class="col-form-label">Descripción Equipo:</label>
             <textarea class="form-control" id="description" name="description"></textarea>
-          </div>
-          
-          <div class="mb-6 form-check">
-          <input type="checkbox" class="form-check-input" id="propietario" name="propietario">
-          <label class="form-check-label" for="propietario">¿Eres el propietario?</label>
           </div>
           <br>
           <div class="modal-footer">
@@ -200,7 +216,27 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="editForm" class="row g-3"> 
+        <form id="editForm" class="row g-3">
+            <div class="text-center">
+              <div class="position-relative d-inline-block" style="width: 150px; height: 150px;">
+                <img id="editfotoproduct" src="" alt="Foto Producto" class="rounded-circle img-fluid" style="width: 100%; height: 100%; display: none;">
+                <div id="sinfotoproduct" class="position-absolute top-0 start-0 rounded-circle" style="width: 100%; height: 100%; background-color: #f0f0f0; display: none; justify-content: center; align-items: center;">
+                    <span style="display: flex; justify-content: center; align-items: center;">Sin Foto</span>
+                </div>
+            </div>
+            </div>
+            <div class="text-center mt-3" id="subirfotoproduct" style="display: none;">
+            <label for="editfotoproduto" class="btn btn-warning btn-sm">
+              <i class="bi bi-camera"></i> <span>Subit Foto - Producto( .PNG, .JPG)</span>
+            </label>
+            <input id="editfotoproduto" type="file" style="display: none;"  onchange="mostrarfotoedit(this)">
+          </div>
+           <div class="text-center mt-3" id="elimfotoproduct">
+           <button class="btn btn-danger btn-sm mt-2" onclick="eliminarFotoedit()" id="eliminarfotoproduct">
+              <i class="bi bi-trash"></i><span>Eliminar Foto</span>
+            </button>
+           </div>
+
             <div class="col-md-6">
               <label for="editTitle" class="form-label">Título:</label>
               <input type="text" class="form-control" id="id" name="id" hidden>
@@ -218,7 +254,7 @@
               <label for="editStock" class="form-label">Stock:</label>
               <input type="number" class="form-control" id="editStock" name="stock" required>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
               <label for="editCategory" class="form-label">Categoría Equipo:</label>
               <select class="form-select" id="editCategory" name="category" required>
                 <option value="" selected>Seleccione categorías</option>
@@ -227,10 +263,6 @@
                 <option value="Impresoras">Impresoras</option>
                 <option value="Equipos de Red">Equipos de Red</option>
               </select>
-            </div>
-            <div class="col-md-6">
-              <label for="editThumbnail" class="form-label">Thumbnail (URL):</label>
-              <input type="text" class="form-control" id="editThumbnail" name="thumbnail" required>
             </div>
             <div class="col-12">
               <label for="editDescription" class="form-label">Descripción:</label>
@@ -253,6 +285,122 @@
 </div>
 
 <br>
+<script>
+
+  function mostrarFoto(input) {
+    const allowedExtensions = /(\.jpg|\.png)$/i;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (!allowedExtensions.exec(file.name)) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Sistema de Ventas',
+          text: 'Por favor, selecciona un archivo con extensión .jpg o .png.',
+        });
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('fotoproduct').src = e.target.result;
+        document.getElementById('fotoproduct').style.display = 'block';
+        document.getElementById('fotoPlaceholder').style.display = 'none';
+        document.getElementById('btnsubirp').style.display = 'none';
+        document.getElementById('btneliminarp').style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  function eliminarFoto() {
+    document.getElementById('fotoproduct').src = '';
+    document.getElementById('fotoproduct').style.display = 'none';
+    document.getElementById('inputFotop').value = '';
+    document.getElementById('fotoPlaceholder').style.display = 'block';
+    document.getElementById('btnsubirp').style.display = 'block';
+    document.getElementById('btneliminarp').style.display = 'none';
+  }
+function eliminarFotoedit() {
+  event.preventDefault();
+  let rutaimg = $('#editfotoproduct').attr('src');
+   console.log(rutaimg)
+  if (rutaimg.startsWith("../products/")) {
+      Swal.fire({
+          title: '¿Estás seguro?',
+          text: 'Esta acción eliminará la imagen del servidor de forma permanente.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              $.ajax({
+                  url: '/products/deleteimg',
+                  type: 'POST',
+                  data: { rutaimg: rutaimg },
+                  success: function(response) {
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Eliminación exitosa',
+                          text: response.message,
+                      });
+                      $('#editfotoproduct').attr('src', null);
+                      $('#editfotoproduct').css('display', 'none');
+                      $('#sinfotoproduct').css('display', 'flex');
+                      $('#subirfotoproduct').css('display', 'block');
+                      $('#elimfotoproduct').css('display', 'none');
+                  },
+                  error: function(xhr, status, error) {
+                      Swal.fire({
+                          icon: 'error',
+                          title: 'Error',
+                          text: 'Hubo un problema al eliminar la imagen.',
+                      });
+                  }
+              });
+          }
+      });
+    } else if (/^data:image\/jpeg;base64,/.test(rutaimg)) {
+      $('#editfotoproduct').attr('src', null);
+      $('#editfotoproduct').css('display', 'none');
+      $('#sinfotoproduct').css('display', 'flex');
+      $('#subirfotoproduct').css('display', 'block');
+      $('#elimfotoproduct').css('display', 'none');
+
+    } else if (/^data:image\/png;base64,/.test(rutaimg)) {
+      $('#editfotoproduct').attr('src', null);
+      $('#editfotoproduct').css('display', 'none');
+      $('#sinfotoproduct').css('display', 'flex');
+      $('#subirfotoproduct').css('display', 'block');
+      $('#elimfotoproduct').css('display', 'none');
+    }
+}
+function mostrarfotoedit(input) {
+    const allowedExtensions = /(\.jpg|\.png)$/i;
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        if (!allowedExtensions.test(file.name)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Sistema de Ventas',
+                text: 'Por favor, selecciona un archivo con extensión .jpg o .png.'
+            });
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const editfotoproduct = document.getElementById('editfotoproduct');
+            editfotoproduct.src = e.target.result;
+            editfotoproduct.style.display = 'block';
+            const sinfotoproduct = document.getElementById('sinfotoproduct');
+            sinfotoproduct.style.display = 'none';
+            $('#subirfotoproduct').css('display', 'none');
+            $('#elimfotoproduct').css('display', 'block');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/products.js"></script>  
 
