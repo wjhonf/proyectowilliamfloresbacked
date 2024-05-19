@@ -145,13 +145,6 @@ async function mostrarDetallesCarrito() {
     contenidoModal.innerHTML = contenidoCarrito;
     modalDetalleCarrito.show();
 }
-/*function actualizarCantidad(productId, nuevaCantidad) {
-    const productoExistente = carrito.find((item) => item.id === productId);
-    if (productoExistente) {
-        productoExistente.cantidad = parseInt(nuevaCantidad) || 1;
-        mostrarDetallesCarrito();
-    }
-}*/
 function vaciarCarritoYCerrarModal() {
     carrito = []; 
     actualizarContadorCarrito(); 

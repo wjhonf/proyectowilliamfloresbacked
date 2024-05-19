@@ -7,7 +7,6 @@ const axios = require('axios');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const fileStore = require('session-file-store')
-//const { dbUser, dbPassword, dbHost, dbName } = require('../configs/db.config')
 const MongoStore = require('connect-mongo');
 const mongoConnect= require('./db');
 const path = require('path');
@@ -31,18 +30,6 @@ app.use(express.static(process.cwd() + '/src/public'));
 app.engine('handlebars', handlebars.engine());
 app.set('views', process.cwd() + '/src/views');
 app.set('view engine', 'handlebars');
-
-/*app.use(
-  session({
-    secret: 'Williamsecret',
-    store: MongoStore.create({
-      mongoUrl:
-        'mongodb+srv://admin:admin@cluster0.8i3kfch.mongodb.net/session?retryWrites=true&w=majority',
-    }),
-    resave: false,
-    saveUninitialized: false,
-  })
-)*/
 mongoConnect()
 const swaggerOptions = {
   definition:{
@@ -61,8 +48,6 @@ app.use('/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 
 initializePassport()
 app.use(passport.initialize())
-//app.use(passport.session())
-
 const httpServer = app.listen(port, () => {
   winstonLogger.info(`Servidor escuchando en el puerto ${port}`);
 });

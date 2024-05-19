@@ -211,5 +211,4 @@ router.post('/:cid/purchase', passportCall('jwt'), authorization('user'), async 
   }
 });
 
-
 module.exports = router;

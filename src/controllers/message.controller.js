@@ -15,7 +15,6 @@ router.get('/', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -32,7 +31,6 @@ router.get('/:id', async (req, res) => {
       .json({ status: 'error', error });
   }
 });
-
 router.post('/', async (req, res) => {
   try {
     const { user, message } = req.body;

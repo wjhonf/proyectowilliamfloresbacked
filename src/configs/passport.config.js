@@ -7,14 +7,6 @@ const { createHash, useValidPassword } = require('../utils/crypt-password.util')
 const GithubStrategy = require('passport-github2')
 const { ghClientSecret, ghClientId } = require('./app.config')
 const NewUserDto=require('../DTOs/new-user.dto')
-/*const UsersMemoryDao= require ('../DAO/memory/user-memory.dao')
-const UsersMongoDao = require('../DAO/mongo/user-dao.mongo')
-//const Users= new  UsersMemoryDao()
-const Users= new UsersMongoDao()*/
-
-//const UsersFactory= require('../factory/users.factory')
-//const Users= new UsersFactory()
-//const Users= require('../repository')
 const usersService= require('../services/users.service')
 const JWTStrategy = jwt.Strategy
 const LocalStrategy2 = local.Strategy

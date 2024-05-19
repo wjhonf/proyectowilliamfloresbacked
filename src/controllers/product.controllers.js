@@ -69,7 +69,6 @@ router.post('/', passportCall('jwt'),authorization('user'),isAdmin, upload.field
     res
       .status(HTTP_RESPONSES.CREATED)
       .json({ status: 'success', payload: newProduct});
-    //res.redirect('/products');
   } catch (error) {
     req.logger.error(error);
     res
@@ -213,7 +212,6 @@ router.post('/deleteimg', passportCall('jwt'), authorization('user'), isAdmin, a
 });
 
 /*
-
 router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {
   try {
     const { id } = req.params;
@@ -228,58 +226,4 @@ router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async 
       .json({ status: 'error', error });
   }
 });*/
-
-
-/*
-router.post('/', async (req, res) => {
-  try {
-    
-    const filePath = path.join(__dirname, '../equipos.json');
-    console.log(filePath)
-  
-    const productsToRegister = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-
-    if (!Array.isArray(productsToRegister)) {
-      return res
-        .status(HTTP_RESPONSES.BAD_REQUEST)
-        .json({ status: 'error', error: 'Invalid batch product data. Expected an array.' });
-    }
-
-    for (const productData of productsToRegister) {
-      const { title, description, code, price, stock, category, thumbnail, owner} = productData;
-      const productOwner = owner ? owner : 'admin';
-
-      if (!title || !code || !price || !stock) {
-        return res
-          .status(HTTP_RESPONSES.BAD_REQUEST)
-          .json({ status: 'error', error: 'Incomplete or invalid product data' });
-      }
-
-      const newProductInfo = {
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-        thumbnail,
-        owner: productOwner,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const newProduct = await productsService.insertOne(newProductInfo);
-    }
-
-    res
-      .status(HTTP_RESPONSES.CREATED)
-      .json({ status: 'success', payload: 'Lote de productos registrado exitosamente'});
-  } catch (error) {
-    console.log(error);
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error });
-  }
-});*/
-
 module.exports = router;
