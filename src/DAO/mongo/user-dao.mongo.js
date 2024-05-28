@@ -8,6 +8,9 @@ class usersMongoDao {
     return await User.create(newUserInfo)
   }
   async findOne(query) {
+    return await User.findOne(query);
+  }
+  async findOneiddoc(query) {
     return await User.findById(query);
   }
   async updatedatos(user) {

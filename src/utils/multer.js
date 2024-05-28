@@ -16,17 +16,17 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
         let fileName = file.originalname;
         let userId = req.params.uid;
+        const timestamp = Date.now();
         if (file.fieldname === 'profileImage') {
-            fileName = userId + '_imgperfil_' + fileName;
+            fileName = `${userId}_imgperfil_${timestamp}_${fileName}`;
         } else if (file.fieldname === 'documents') {
-            fileName = userId + '_doc_' + fileName;
+            fileName = `${userId}_doc_${timestamp}_${fileName}`;
         }
         else if (file.fieldname === 'thumbnail') {
-            fileName ='imgproduct_' + fileName;
+            fileName = `imgproduct_${timestamp}_${fileName}`;
         }
         cb(null, fileName);
     }
-    
 });
 const upload = multer({ storage: storage });
 module.exports = upload;

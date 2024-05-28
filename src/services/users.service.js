@@ -20,9 +20,12 @@ const createUser = async newUser => {
 const findOne = async query => {
   return await UsersRepository.findOne(query); 
 };
+const findowner = async query => {
+  return await UsersRepository.findOneiddoc(query); 
+};
 const updateUserProfile = async (userId, profileData) => {
   try {
-    const user = await usersRepository.findOne(userId);
+    const user = await usersRepository.findOneiddoc(userId);
     if (!user) {
       throw new Error('User not found');
     }
@@ -65,4 +68,5 @@ module.exports = {
   findOne,
   comabiarrol,
   updateUserProfile,
+  findowner,
 };

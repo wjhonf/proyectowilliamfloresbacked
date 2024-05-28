@@ -13,7 +13,6 @@ const authToken = (req, res, next) => {
   const token = authHeader.split(' ')[1]
 
   jwt.verify(token, secret, (error, credentials) => {
-    console.log(error)
     if (error)
       return res.status(HTTP_RESPONSES.UNAUTHORIZED).json({ status: 'error', error: 'Unauthorized' })
 

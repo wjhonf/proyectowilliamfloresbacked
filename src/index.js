@@ -20,6 +20,8 @@ const logger = require('./middleware/logger.middleware');
 const winstonLogger = require('./utils/winston/factory');
 const swaggerJSDoc =require('swagger-jsdoc')
 const swaggerUiExpress = require('swagger-ui-express')
+require('./cronjobs/cron-delete_users')
+
 app.use(logger);
 
 app.use(express.json());

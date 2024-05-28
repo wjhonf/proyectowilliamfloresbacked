@@ -26,7 +26,7 @@ form.addEventListener('submit', e => {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.status === 'Success') { 
+        if (data.status === 'success') { 
             Swal.fire({
                 icon: 'success',
                 title: 'Registro Exitoso',
@@ -44,7 +44,6 @@ form.addEventListener('submit', e => {
         }
     })
     .catch(error => {
-        console.error('Error durante el registro:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error en la Conexión',

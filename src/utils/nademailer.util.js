@@ -9,5 +9,4 @@ const transport = nodemailer.createTransport({
     pass: email.password,
   },
 })
-
 module.exports = transport

@@ -10,10 +10,11 @@ const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
 const { email } = require('../configs/app.config')
 const transport = require('../utils/nademailer.util')
+const { islistUser } = require('../middleware/authorizacion.acces');
 const multer = require('multer');
 const upload = require('../utils/multer');
 const router = Router()
-router.get('/', passportCall('jwt'),authorization('user'), async (req, res) => {
+router.get('/', passportCall('jwt'),authorization('user'),islistUser, async (req, res) => {
   try {
     const users = await usersService.getUsers();
     const formattedUsers = users.map(user => {
@@ -45,7 +46,7 @@ router.post('/:uid/documents', upload.fields([
     const result = await usersService.updateUserProfile(userId, updateData);
     res.status(200).json(result);
   } catch (error) {
-    console.log(error);
+    req.logger.error(error);
     res.status(500).json({ status: 'error', error: 'Error al subir archivos' });
   }
 });
@@ -79,13 +80,11 @@ router.post(
     try {
       const user= req.user
       const token = generateToken({ id: user._id, first_name: user.first_name,last_name: user.last_name, email: user.email, role: user.role });
-    
       res.cookie('authToken', token, {
         maxAge: 30000,
         httpOnly: true,
       }).json({ status: 'success', payload: 'Logged in' });
     } catch (error) {
-      req.logger.error(error);
       res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error: 'Internal Server Error' });
     }
   }

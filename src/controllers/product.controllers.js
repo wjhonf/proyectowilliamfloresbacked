@@ -2,11 +2,13 @@ const { Router } = require('express');
 const HTTP_RESPONSES = require('../constants/http-responses.contant');
 const Product = require('../DAO/mongo/models/product.model');
 const productsService = require('../services/products.service');
+const userservice = require('../services/users.service')
 const authMiddleware = require('../middleware/auth.middleware')
 const passportCall = require('../utils/passport-call.util')
 const authorization = require('../middleware/authorization.middleware')
 const { isAdmin, isUser } = require('../middleware/authorizacion.acces');
 const { generateProducts } = require('../utils/equipos-mock.util');
+const serviceemail = require('../utils/product-mail.delete')
 const fs = require('fs');
 const path = require('path');
 const upload = require('../utils/multer');
@@ -120,6 +122,9 @@ router.delete('/:id',passportCall('jwt'), authorization('user'), async (req, res
   try {
     const { id } = req.params;
     const product = await productsService.getProductById(id);
+    const owner  = product.owner
+    const userrole= await userservice.findowner(owner)
+    const validarrole = userrole.role
     const dataimg = await Product.findById(id);
     const rutaimg = {
       thumbnail: dataimg.thumbnail,
@@ -130,30 +135,48 @@ router.delete('/:id',passportCall('jwt'), authorization('user'), async (req, res
     if (!product) {
       return res.status(HTTP_RESPONSES.NOT_FOUND).json({ status: 'error', message: 'Producto no encontrado' });
     }
-    if(id !="" && req.user== undefined)
-    {
-       if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-       } 
-       await productsService.deleteProductById(id);
-       return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
-    }else{
     if (req.user.role === 'admin') {
-      if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-      } 
-      await productsService.deleteProductById(id);
-      return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+        if(validarrole === 'premium'){
+            const email=userrole.email
+            const nameprocut=product.title
+            if (fs.existsSync(imagePath)) {
+              fs.unlinkSync(imagePath);
+            } 
+            await productsService.deleteProductById(id);
+            await  serviceemail.senddeleteproduct(email, nameprocut)
+            return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+
+        }
+        else{
+            if (fs.existsSync(imagePath)) {
+              fs.unlinkSync(imagePath);
+            } 
+            await productsService.deleteProductById(id);
+            return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+        }
     }
     if (req.user.role === 'premium' && (!product.owner || product.owner.toString() === req.user.id.toString())) {
-      if (fs.existsSync(imagePath)) {
-          fs.unlinkSync(imagePath);
-      } 
-      await productsService.deleteProductById(id);
-      return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+          if(validarrole === 'premium'){
+            const email=userrole.email
+            const nameprocut=product.title
+            if (fs.existsSync(imagePath)) {
+              fs.unlinkSync(imagePath);
+            } 
+            await productsService.deleteProductById(id);
+            await  serviceemail.senddeleteproduct(email, nameprocut)
+            return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+
+        }
+        else{
+            if (fs.existsSync(imagePath)) {
+              fs.unlinkSync(imagePath);
+            } 
+            await productsService.deleteProductById(id);
+            return res.status(HTTP_RESPONSES.OK).json({ status: 'success', message: 'Producto eliminado exitosamente' });
+        }
     } else {
       return res.status(HTTP_RESPONSES.BAD_REQUEST).json({ status: 'error', message: 'No tienes permisos para eliminar este producto' });
-    }}
+    }
   } catch (error) {
     req.logger.error(error);
     return res.status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR).json({ status: 'error', error });
@@ -211,19 +234,4 @@ router.post('/deleteimg', passportCall('jwt'), authorization('user'), isAdmin, a
   }
 });
 
-/*
-router.delete('/:id', passportCall('jwt'),authorization('user'),isAdmin,  async (req, res) => {
-  try {
-    const { id } = req.params;
-    await productsService.deleteProductById(id);
-    res
-      .status(HTTP_RESPONSES.OK)
-      .json({ status: 'success', message: 'Product deleted successfully' });
-  } catch (error) {
-    req.logger.error(error);
-    res
-      .status(HTTP_RESPONSES.INTERNAL_SERVER_ERROR)
-      .json({ status: 'error', error });
-  }
-});*/
 module.exports = router;

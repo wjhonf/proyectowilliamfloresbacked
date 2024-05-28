@@ -18,4 +18,14 @@ function isUser(req, res, next) {
     }
 }
 
-module.exports = { isAdmin, isUser };
+function islistUser(req, res, next) {
+    const currentUser = req.user; 
+    console.log(currentUser)
+    if (currentUser.role === 'admin') {
+        next();
+    } else {
+        res.redirect('/home?error=Acceso%20denegado');
+    }
+}
+
+module.exports = { isAdmin, isUser, islistUser};

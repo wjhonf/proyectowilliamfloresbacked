@@ -58,3 +58,32 @@
         });
     });
 });
+let CartId;
+function setCartIdToDelete(id) {
+CartId = id;
+}
+function deletedeletecart() {
+    if (CartId) {
+    fetch('/listcarts/carts/' + CartId, {
+    method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+    console.log(data)
+    $('#deleteModal').modal('hide');
+    window.location.href = '/listcarts/view';
+    Swal.fire({
+    toast: true,
+    icon: 'info',
+    title: 'Carrito Eliminado',
+    animation: false,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 700000,
+    timerProgressBar: true,
+    })
+     
+    })
+    .catch(error => console.error('Error:', error));
+    }
+}
