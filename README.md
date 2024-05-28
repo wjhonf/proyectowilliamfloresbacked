@@ -1,5 +1,5 @@
 # E-Commerce
-¡Bienvenido a la Plataforma de E-Commerce! Este proyecto es una tienda en línea completamente funcional donde los usuarios pueden navegar por productos, agregarlos a su carrito y realizar compras. 
+Este proyecto es un  sistema donde los usuarios pueden navegar por productos, agregarlos a su carrito y realizar compras. 
 
 ## Características
 
